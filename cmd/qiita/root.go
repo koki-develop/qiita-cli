@@ -3,10 +3,15 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/spf13/cobra"
+)
+
+var (
+	version string
 )
 
 var (
@@ -27,6 +32,16 @@ func main() {
 }
 
 func init() {
+	/*
+	 * version
+	 */
+	if version == "" {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			version = info.Main.Version
+		}
+	}
+	rootCmd.Version = version
+
 	/*
 	 * commands
 	 */
