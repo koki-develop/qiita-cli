@@ -35,22 +35,22 @@ func (f *Flag) Changed(cmd *cobra.Command) bool {
 type String struct {
 	*Flag
 	Default string
-	Value   string
+	value   string
 }
 
 func (f *String) AddTo(cmds ...*cobra.Command) {
 	for _, cmd := range cmds {
 		if f.ShortName != "" {
-			cmd.Flags().StringVarP(&f.Value, f.Name, f.ShortName, f.Default, f.Description)
+			cmd.Flags().StringVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
 		} else {
-			cmd.Flags().StringVar(&f.Value, f.Name, f.Default, f.Description)
+			cmd.Flags().StringVar(&f.value, f.Name, f.Default, f.Description)
 		}
 	}
 }
 
 func (f *String) Get(cmd *cobra.Command, nonnull bool) *string {
 	if nonnull || f.Changed(cmd) {
-		return &f.Value
+		return &f.value
 	}
 	return nil
 }
@@ -58,22 +58,22 @@ func (f *String) Get(cmd *cobra.Command, nonnull bool) *string {
 type Int struct {
 	*Flag
 	Default int
-	Value   int
+	value   int
 }
 
 func (f *Int) AddTo(cmds ...*cobra.Command) {
 	for _, cmd := range cmds {
 		if f.ShortName != "" {
-			cmd.Flags().IntVarP(&f.Value, f.Name, f.ShortName, f.Default, f.Description)
+			cmd.Flags().IntVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
 		} else {
-			cmd.Flags().IntVar(&f.Value, f.Name, f.Default, f.Description)
+			cmd.Flags().IntVar(&f.value, f.Name, f.Default, f.Description)
 		}
 	}
 }
 
 func (f *Int) Get(cmd *cobra.Command, nonnull bool) *int {
 	if nonnull || f.Changed(cmd) {
-		return &f.Value
+		return &f.value
 	}
 	return nil
 }
@@ -81,22 +81,22 @@ func (f *Int) Get(cmd *cobra.Command, nonnull bool) *int {
 type StringSlice struct {
 	*Flag
 	Default []string
-	Value   []string
+	value   []string
 }
 
 func (f *StringSlice) AddTo(cmds ...*cobra.Command) {
 	for _, cmd := range cmds {
 		if f.ShortName != "" {
-			cmd.Flags().StringSliceVarP(&f.Value, f.Name, f.ShortName, f.Default, f.Description)
+			cmd.Flags().StringSliceVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
 		} else {
-			cmd.Flags().StringSliceVar(&f.Value, f.Name, f.Default, f.Description)
+			cmd.Flags().StringSliceVar(&f.value, f.Name, f.Default, f.Description)
 		}
 	}
 }
 
 func (f *StringSlice) Get(cmd *cobra.Command, nonnull bool) *[]string {
 	if nonnull || f.Changed(cmd) {
-		return &f.Value
+		return &f.value
 	}
 	return nil
 }
