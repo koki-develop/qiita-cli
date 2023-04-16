@@ -1,10 +1,10 @@
 package qiita
 
-import "github.com/koki-develop/qiita-cli/internal/printer"
+import "github.com/koki-develop/qiita-cli/internal/printers"
 
 var (
-	_ printer.Printable = (Item)(nil)
-	_ printer.Printable = (Items)(nil)
+	_ printers.Printable = (Item)(nil)
+	_ printers.Printable = (Items)(nil)
 )
 
 type Item map[string]interface{}

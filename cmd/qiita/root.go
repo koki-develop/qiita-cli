@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/koki-develop/qiita-cli/internal/printer"
+	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +46,7 @@ func init() {
 
 	// format
 	for _, cmd := range []*cobra.Command{itemsSearchCmd} {
-		cmd.Flags().StringVarP(&flagFormat, "format", "f", "json", fmt.Sprintf("output format (%s)", strings.Join(printer.ListFormats(), "|")))
+		cmd.Flags().StringVarP(&flagFormat, "format", "f", "json", fmt.Sprintf("output format (%s)", strings.Join(printers.ListFormats(), "|")))
 	}
 
 	// items

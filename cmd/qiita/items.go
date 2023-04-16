@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/koki-develop/qiita-cli/internal/printer"
+	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ var itemsSearchCmd = &cobra.Command{
 	Long:  "search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		p, err := printer.Get(flagFormat)
+		p, err := printers.Get(flagFormat)
 		if err != nil {
 			return err
 		}
