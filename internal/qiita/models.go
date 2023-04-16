@@ -12,6 +12,14 @@ type Items []Item
 
 func (item Item) TableRows() []map[string]interface{} {
 	item["user"] = item["user"].(map[string]interface{})["id"]
+
+	tags := item["tags"].([]interface{})
+	tagNames := make([]string, len(tags))
+	for i, t := range tags {
+		tagNames[i] = t.(map[string]interface{})["name"].(string)
+	}
+	item["tags"] = tagNames
+
 	return []map[string]interface{}{item}
 }
 
