@@ -14,21 +14,13 @@ var itemsCmd = &cobra.Command{
 	Long:  "Manage items.",
 }
 
-var (
-	flagItemColumns []string
-
-	flagItemsSearchPage    int
-	flagItemsSearchPerPage int
-	flagItemsSearchQuery   string
-)
-
 var itemsSearchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "search items",
 	Long:  "search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		p, err := printers.Get(flagFormat)
+		p, err := printers.Get(flagFormat.Value)
 		if err != nil {
 			return err
 		}
@@ -36,10 +28,10 @@ var itemsSearchCmd = &cobra.Command{
 		cl := qiita.New("")
 
 		params := &qiita.ListItemsParameters{}
-		params.Page = &flagItemsSearchPage
-		params.PerPage = &flagItemsSearchPerPage
-		if cmd.Flags().Changed("query") {
-			params.Query = &flagItemsSearchQuery
+		params.Page = &flagItemsSearchPage.Value
+		params.PerPage = &flagItemsSearchPerPage.Value
+		if flagItemsSearchQuery.Changed(cmd) {
+			params.Query = &flagItemsSearchQuery.Value
 		}
 
 		items, err := cl.ListItems(params)
@@ -47,7 +39,7 @@ var itemsSearchCmd = &cobra.Command{
 			return err
 		}
 
-		if err := p.Print(os.Stdout, flagItemColumns, items); err != nil {
+		if err := p.Print(os.Stdout, flagItemColumns.Value, items); err != nil {
 			return err
 		}
 

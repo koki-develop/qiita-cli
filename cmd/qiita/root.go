@@ -1,21 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"runtime/debug"
-	"strings"
 
-	"github.com/koki-develop/qiita-cli/internal/printers"
+	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/spf13/cobra"
 )
 
 var (
 	version string
-)
-
-var (
-	flagFormat string
 )
 
 var rootCmd = &cobra.Command{
@@ -46,10 +40,10 @@ func init() {
 	 * commands
 	 */
 
-	// items
+	/* items */
 	rootCmd.AddCommand(itemsCmd)
 	itemsCmd.AddCommand(
-		itemsSearchCmd,
+		itemsSearchCmd, // items search
 	)
 
 	/*
@@ -59,18 +53,25 @@ func init() {
 		cmd.Flags().SortFlags = false
 	}
 
-	// format
-	for _, cmd := range []*cobra.Command{itemsSearchCmd} {
-		cmd.Flags().StringVarP(&flagFormat, "format", "f", "json", fmt.Sprintf("output format (%s)", strings.Join(printers.ListFormats(), "|")))
-	}
+	/* common */
+	flags.Flags{
+		flagFormat, // --format
+	}.AddTo(
+		// items
+		itemsSearchCmd, // items search
+	)
 
-	// items
-	for _, cmd := range []*cobra.Command{itemsSearchCmd} {
-		cmd.Flags().StringSliceVar(&flagItemColumns, "columns", []string{"id", "title", "user", "url"}, "properties that are going to be presented as columns (table format only)")
-	}
+	/* items */
+	flags.Flags{
+		flagItemColumns, // --columns
+	}.AddTo(
+		itemsSearchCmd, // items search
+	)
 
-	// items search
-	itemsSearchCmd.Flags().IntVar(&flagItemsSearchPage, "page", 1, "page number (from 1 to 100)")
-	itemsSearchCmd.Flags().IntVar(&flagItemsSearchPerPage, "per-page", 100, "records count per page (from 1 to 100)")
-	itemsSearchCmd.Flags().StringVarP(&flagItemsSearchQuery, "query", "q", "", "search query")
+	/* items search */
+	flags.Flags{
+		flagItemsSearchPage,    // --page
+		flagItemsSearchPerPage, // --per-page
+		flagItemsSearchQuery,   // --query
+	}.AddTo(itemsSearchCmd)
 }
