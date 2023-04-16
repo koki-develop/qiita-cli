@@ -55,7 +55,7 @@ func init() {
 	}
 
 	// items search
-	itemsSearchCmd.Flags().IntVar(&flagItemsSearchPage, "page", 0, "page number (from 1 to 100)")
+	itemsSearchCmd.Flags().IntVar(&flagItemsSearchPage, "page", 1, "page number (from 1 to 100)")
 	itemsSearchCmd.Flags().IntVar(&flagItemsSearchPerPage, "per-page", 100, "records count per page (from 1 to 100)")
 	itemsSearchCmd.Flags().StringVarP(&flagItemsSearchQuery, "query", "q", "", "search query")
 }

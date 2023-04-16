@@ -7,10 +7,12 @@ import (
 )
 
 type Printer interface {
-	Print(w io.Writer, p Printable) error
+	Print(w io.Writer, cols []string, p Printable) error
 }
 
-type Printable interface{}
+type Printable interface {
+	TableRows() []map[string]interface{}
+}
 
 var Registry = map[string]Printer{}
 
