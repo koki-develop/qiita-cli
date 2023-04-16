@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"reflect"
+	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/util"
 )
@@ -18,7 +20,8 @@ func NewTablePrinter() *TablePrinter {
 	return &TablePrinter{}
 }
 
-func (*TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
+// TODO: refactor
+func (printer *TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
 	buf := new(bytes.Buffer)
 
 	rows := p.TableRows()
@@ -28,7 +31,7 @@ func (*TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
 		l := 0
 		for _, row := range rows {
 			v := row[col]
-			s := fmt.Sprint(v)
+			s := printer.string(v)
 			l = util.Max(l, util.Width(s))
 		}
 		columnLengths[col] = util.Max(l, util.Width(col))
@@ -49,7 +52,7 @@ func (*TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
 		for i, col := range cols {
 			l := columnLengths[col]
 			v := row[col]
-			d := util.Pad(fmt.Sprint(v), l)
+			d := util.Pad(printer.string(v), l)
 			buf.WriteString(d)
 			if i+1 != len(cols) {
 				buf.WriteRune(' ')
@@ -62,4 +65,19 @@ func (*TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
 		return err
 	}
 	return nil
+}
+
+func (printer *TablePrinter) string(v interface{}) string {
+	rv := reflect.ValueOf(v)
+	switch rv.Kind() {
+	case reflect.Slice:
+		l := rv.Len()
+		cols := make([]string, l)
+		for i := 0; i < l; i++ {
+			cols[i] = printer.string(rv.Index(i).Interface())
+		}
+		return strings.Join(cols, ", ")
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
