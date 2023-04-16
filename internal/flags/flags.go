@@ -48,6 +48,13 @@ func (f *String) AddTo(cmds ...*cobra.Command) {
 	}
 }
 
+func (f *String) Get(cmd *cobra.Command, nonnull bool) *string {
+	if nonnull || f.Changed(cmd) {
+		return &f.Value
+	}
+	return nil
+}
+
 type Int struct {
 	*Flag
 	Default int
@@ -64,6 +71,13 @@ func (f *Int) AddTo(cmds ...*cobra.Command) {
 	}
 }
 
+func (f *Int) Get(cmd *cobra.Command, nonnull bool) *int {
+	if nonnull || f.Changed(cmd) {
+		return &f.Value
+	}
+	return nil
+}
+
 type StringSlice struct {
 	*Flag
 	Default []string
@@ -78,4 +92,11 @@ func (f *StringSlice) AddTo(cmds ...*cobra.Command) {
 			cmd.Flags().StringSliceVar(&f.Value, f.Name, f.Default, f.Description)
 		}
 	}
+}
+
+func (f *StringSlice) Get(cmd *cobra.Command, nonnull bool) *[]string {
+	if nonnull || f.Changed(cmd) {
+		return &f.Value
+	}
+	return nil
 }

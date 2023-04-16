@@ -27,13 +27,11 @@ var itemsSearchCmd = &cobra.Command{
 
 		cl := qiita.New("")
 
-		params := &qiita.ListItemsParameters{}
-		params.Page = &flagItemsSearchPage.Value
-		params.PerPage = &flagItemsSearchPerPage.Value
-		if flagItemsSearchQuery.Changed(cmd) {
-			params.Query = &flagItemsSearchQuery.Value
+		params := &qiita.ListItemsParameters{
+			Page:    flagItemsSearchPage.Get(cmd, true),
+			PerPage: flagItemsSearchPerPage.Get(cmd, true),
+			Query:   flagItemsSearchQuery.Get(cmd, false),
 		}
-
 		items, err := cl.ListItems(params)
 		if err != nil {
 			return err
