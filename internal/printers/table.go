@@ -41,7 +41,7 @@ func (printer *TablePrinter) Print(w io.Writer, cols []string, p Printable) erro
 		l := columnLengths[col]
 		h := util.Pad(col, l)
 
-		buf.WriteString(h)
+		buf.WriteString(strings.ToUpper(h))
 		if i+1 != len(cols) {
 			buf.WriteRune(' ')
 		}
