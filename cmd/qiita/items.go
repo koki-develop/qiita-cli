@@ -20,7 +20,7 @@ var itemsSearchCmd = &cobra.Command{
 	Long:  "search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		p, err := printers.Get(flagFormat.Value)
+		p, err := printers.Get(*flagFormat.Get(cmd, true))
 		if err != nil {
 			return err
 		}
@@ -37,7 +37,7 @@ var itemsSearchCmd = &cobra.Command{
 			return err
 		}
 
-		if err := p.Print(os.Stdout, flagItemColumns.Value, items); err != nil {
+		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), items); err != nil {
 			return err
 		}
 
