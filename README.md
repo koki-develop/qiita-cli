@@ -27,7 +27,21 @@ CLI for <a href="https://qiita.com">Qiita</a>.
 
 ## Installation
 
-🚧 WIP 🚧
+### Homebrew
+
+```console
+$ brew install koki-develop/tap/qiita
+```
+
+### `go install`
+
+```console
+$ go install github.com/koki-develop/qiita-cli/cmd/qiita@latest
+```
+
+### Releases
+
+Download the binary from the [releases page](https://github.com/koki-develop/qiita-cli/releases/latest).
 
 ## Getting Started
 
