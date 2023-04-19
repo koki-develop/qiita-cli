@@ -8,7 +8,6 @@ import (
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v3"
 )
 
 type itemFrontMatter struct {
@@ -211,19 +210,14 @@ var itemsCreateCmd = &cobra.Command{
 				Tags:    util.Strings(item.Tags().Names()),
 				Private: util.Bool(item.Private()),
 			}
-			y, err := yaml.Marshal(fm)
-			if err != nil {
-				return err
-			}
 			f, err := os.Create(*flagItemsCreateFile.Get(cmd, true))
 			if err != nil {
 				return err
 			}
 			defer f.Close()
-			f.WriteString("---\n")
-			f.Write(y)
-			f.WriteString("---\n\n")
-			f.WriteString(item.Body())
+			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+				return err
+			}
 		}
 
 		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {

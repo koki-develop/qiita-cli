@@ -40,3 +40,27 @@ func ReadMarkdown(r io.Reader, frontMatter interface{}) (string, error) {
 
 	return md, nil
 }
+
+func WriteMarkdown(w io.Writer, md string, frontMatter interface{}) error {
+	y, err := yaml.Marshal(frontMatter)
+	if err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte("---\n")); err != nil {
+		return err
+	}
+	if _, err := w.Write(y); err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte("---\n")); err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte{'\n'}); err != nil {
+		return err
+	}
+	if _, err := w.Write([]byte(md)); err != nil {
+		return err
+	}
+
+	return nil
+}
