@@ -57,40 +57,27 @@ func init() {
 	 */
 	disableSortFlags(rootCmd)
 
-	/* common */
-	flags.Flags{
-		flagFormat, // --format
-	}.AddTo(
-		// items
-		itemsSearchCmd, // items search
-		itemsListCmd,   // items list
-	)
-
 	/* configure */
 	flags.Flags{
 		flagConfigureAccessToken, // --access-token
 		flagConfigureFormat,      // --format
 	}.AddTo(configureCmd)
 
-	/* items */
-	flags.Flags{
-		flagItemColumns, // --columns
-	}.AddTo(
-		itemsSearchCmd, // items search
-		itemsListCmd,   // items list
-	)
-
 	/* items search */
 	flags.Flags{
-		flagItemsSearchPage,    // --page
-		flagItemsSearchPerPage, // --per-page
-		flagItemsSearchQuery,   // --query
+		flagFormat,           // --format
+		flagItemColumns,      // --columns
+		flagPage,             // --page
+		flagPerPage,          // --per-page
+		flagItemsSearchQuery, // --query
 	}.AddTo(itemsSearchCmd)
 
 	/* items list */
 	flags.Flags{
-		flagItemsListPage,    // --page
-		flagItemsListPerPage, // --per-page
+		flagFormat,      // --format
+		flagItemColumns, // --columns
+		flagPage,        // --page
+		flagPerPage,     // --per-page
 	}.AddTo(itemsListCmd)
 }
 

@@ -33,8 +33,8 @@ var itemsSearchCmd = &cobra.Command{
 		cl := qiita.New(cfg.AccessToken)
 
 		params := &qiita.ListItemsParameters{
-			Page:    flagItemsSearchPage.Get(cmd, true),
-			PerPage: flagItemsSearchPerPage.Get(cmd, true),
+			Page:    flagPage.Get(cmd, true),
+			PerPage: flagPerPage.Get(cmd, true),
 			Query:   flagItemsSearchQuery.Get(cmd, false),
 		}
 		items, err := cl.ListItems(params)
@@ -69,8 +69,8 @@ var itemsListCmd = &cobra.Command{
 		cl := qiita.New(cfg.AccessToken)
 
 		params := &qiita.ListAuthenticatedUserItemsParameters{
-			Page:    flagItemsListPage.Get(cmd, true),
-			PerPage: flagItemsListPerPage.Get(cmd, true),
+			Page:    flagPage.Get(cmd, true),
+			PerPage: flagPerPage.Get(cmd, true),
 		}
 		items, err := cl.ListAuthenticatedUserItems(params)
 		if err != nil {
