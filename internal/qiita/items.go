@@ -57,3 +57,25 @@ func (cl *Client) GetItem(id string) (*Item, error) {
 
 	return &item, nil
 }
+
+type CreateItemParameters struct {
+	Body    *string `json:"body,omitempty"`
+	Private *bool   `json:"private,omitempty"`
+	Tags    *Tags   `json:"tags,omitempty"`
+	Title   *string `json:"title,omitempty"`
+	Tweet   *bool   `json:"tweet,omitempty"`
+}
+
+func (cl *Client) CreateItem(params *CreateItemParameters) (*Item, error) {
+	req, err := cl.newRequest(http.MethodPost, "items", nil, params)
+	if err != nil {
+		return nil, err
+	}
+
+	var item Item
+	if err := cl.doRequest(req, &item); err != nil {
+		return nil, err
+	}
+
+	return &item, nil
+}
