@@ -3,7 +3,6 @@ package qiita
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -72,7 +71,7 @@ func (cl *Client) doRequest(req *http.Request, dst interface{}) error {
 		if _, err := io.Copy(&s, resp.Body); err != nil {
 			return err
 		}
-		return errors.New(s.String())
+		return fmt.Errorf("%d: %s", resp.StatusCode, s.String())
 	}
 
 	if dst != nil {
