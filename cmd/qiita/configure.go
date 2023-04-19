@@ -8,7 +8,10 @@ import (
 var configureCmd = &cobra.Command{
 	Use: "configure",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := config.Configure(&config.Config{}); err != nil {
+		cfg := &config.Config{
+			AccessToken: *flagConfigureAccessToken.Get(cmd, true),
+		}
+		if err := config.Configure(cfg); err != nil {
 			return err
 		}
 

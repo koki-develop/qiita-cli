@@ -64,6 +64,11 @@ func init() {
 		itemsSearchCmd, // items search
 	)
 
+	/* configure */
+	flags.Flags{
+		flagConfigureAccessToken, // --access-token
+	}.AddTo(configureCmd)
+
 	/* items */
 	flags.Flags{
 		flagItemColumns, // --columns

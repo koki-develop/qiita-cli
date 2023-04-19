@@ -18,6 +18,14 @@ var (
 	}
 )
 
+// configure
+var (
+	flagConfigureAccessToken = &flags.String{Flag: &flags.Flag{
+		Name:        "access-token",
+		Description: "qiita access token"},
+	}
+)
+
 // items
 var (
 	// --columns
