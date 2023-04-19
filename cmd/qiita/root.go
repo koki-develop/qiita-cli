@@ -41,7 +41,10 @@ func init() {
 	 */
 
 	/* items */
-	rootCmd.AddCommand(itemsCmd)
+	rootCmd.AddCommand(
+		configureCmd, // configure
+		itemsCmd,     // items
+	)
 	itemsCmd.AddCommand(
 		itemsSearchCmd, // items search
 	)
