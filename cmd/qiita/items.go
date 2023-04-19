@@ -1,10 +1,13 @@
 package main
 
 import (
+	"io"
 	"os"
+	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
+	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
 )
 
@@ -135,6 +138,19 @@ var itemsCreateCmd = &cobra.Command{
 		cl := qiita.New(cfg.AccessToken)
 
 		params := &qiita.CreateItemParameters{}
+		if flagItemsCreateFile.Changed(cmd) {
+			f, err := os.Open(*flagItemsCreateFile.Get(cmd, false))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			var s strings.Builder
+			if _, err := io.Copy(&s, f); err != nil {
+				return err
+			}
+			params.Body = util.String(s.String())
+		}
+
 		if flagItemsCreateTitle.Changed(cmd) {
 			params.Title = flagItemsCreateTitle.Get(cmd, false)
 		}
