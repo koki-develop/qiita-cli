@@ -52,6 +52,7 @@ func init() {
 		itemsListCmd,   // items list
 		itemsGetCmd,    // items get
 		itemsCreateCmd, // items create
+		itemsDeleteCmd, // items delete
 	)
 
 	/*

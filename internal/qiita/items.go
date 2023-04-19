@@ -79,3 +79,16 @@ func (cl *Client) CreateItem(params *CreateItemParameters) (*Item, error) {
 
 	return &item, nil
 }
+
+func (cl *Client) DeleteItem(id string) error {
+	req, err := cl.newRequest(http.MethodDelete, fmt.Sprintf("items/%s", id), nil, nil)
+	if err != nil {
+		return err
+	}
+
+	if err := cl.doRequest(req, nil); err != nil {
+		return err
+	}
+
+	return nil
+}

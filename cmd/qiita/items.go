@@ -227,3 +227,25 @@ var itemsCreateCmd = &cobra.Command{
 		return nil
 	},
 }
+
+var itemsDeleteCmd = &cobra.Command{
+	Use:   "delete [id]",
+	Short: "Delete an item",
+	Long:  "Delete an item.",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		id := args[0]
+
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
+		cl := qiita.New(cfg.AccessToken)
+		if err := cl.DeleteItem(id); err != nil {
+			return err
+		}
+
+		return nil
+	},
+}
