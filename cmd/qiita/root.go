@@ -105,8 +105,12 @@ func init() {
 
 	/* items update */
 	flags.Flags{
-		flagFormat,      // --format
-		flagItemColumns, // --columns
+		flagFormat,             // --format
+		flagItemColumns,        // --columns
+		flagItemsUpdateTitle,   // --title
+		flagItemsUpdateTags,    // --tags
+		flagItemsUpdateBody,    // --body
+		flagItemsUpdatePrivate, // --private
 	}.AddTo(itemsUpdateCmd)
 }
 

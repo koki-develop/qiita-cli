@@ -91,7 +91,7 @@ var (
 	// --title
 	flagItemsCreateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
-		Description: "the title of the item to be created",
+		Description: "the title of the item",
 	}}
 
 	// --tags
@@ -109,12 +109,36 @@ var (
 	// --private
 	flagItemsCreatePrivate = &flags.Bool{Flag: &flags.Flag{
 		Name:        "private",
-		Description: "whether the item to be created is private"},
+		Description: "whether the item is private"},
 	}
 
 	// --tweet
 	flagItemsCreateTweet = &flags.Bool{Flag: &flags.Flag{
 		Name:        "tweet",
 		Description: "whether to post a tweet"},
+	}
+)
+
+// items update
+var (
+	// --title
+	flagItemsUpdateTitle = &flags.String{Flag: &flags.Flag{
+		Name:        "title",
+		Description: "the title of the item",
+	}}
+	// --tags
+	flagItemsUpdateTags = &flags.StringSlice{Flag: &flags.Flag{
+		Name:        "tags",
+		Description: "a list of tags"},
+	}
+	// --body
+	flagItemsUpdateBody = &flags.String{Flag: &flags.Flag{
+		Name:        "body",
+		Description: "item body in markdown"},
+	}
+	// --private
+	flagItemsUpdatePrivate = &flags.Bool{Flag: &flags.Flag{
+		Name:        "private",
+		Description: "whether the item is private"},
 	}
 )

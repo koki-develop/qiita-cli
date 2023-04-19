@@ -234,6 +234,49 @@ var itemsUpdateCmd = &cobra.Command{
 	Long:  "Update an item.",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
+		p, err := printers.Get(*flagFormat.Get(cmd, true))
+		if err != nil {
+			return err
+		}
+
+		cl := qiita.New(cfg.AccessToken)
+
+		var id string
+		params := &qiita.UpdateItemParameters{}
+		if len(args) > 0 {
+			id = args[0]
+		}
+		if id == "" {
+			return errors.New("id must be specified")
+		}
+		if flagItemsUpdateTitle.Changed(cmd) {
+			params.Title = flagItemsUpdateTitle.Get(cmd, true)
+		}
+		if flagItemsUpdateTags.Changed(cmd) {
+			tags := qiita.TagsFromStrings(*flagItemsUpdateTags.Get(cmd, true))
+			params.Tags = &tags
+		}
+		if flagItemsUpdateBody.Changed(cmd) {
+			params.Body = flagItemsUpdateBody.Get(cmd, true)
+		}
+		if flagItemsUpdatePrivate.Changed(cmd) {
+			params.Private = flagItemsUpdatePrivate.Get(cmd, true)
+		}
+
+		item, err := cl.UpdateItem(id, params)
+		if err != nil {
+			return err
+		}
+
+		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
+			return err
+		}
+
 		return nil
 	},
 }
