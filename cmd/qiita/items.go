@@ -115,3 +115,51 @@ var itemsGetCmd = &cobra.Command{
 		return nil
 	},
 }
+
+var itemsCreateCmd = &cobra.Command{
+	Use:   "create",
+	Short: "create an item",
+	Long:  "create an item.",
+	Args:  cobra.ExactArgs(0),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
+		p, err := printers.Get(*flagFormat.Get(cmd, true))
+		if err != nil {
+			return err
+		}
+
+		cl := qiita.New(cfg.AccessToken)
+
+		params := &qiita.CreateItemParameters{}
+		if flagItemsCreateTitle.Changed(cmd) {
+			params.Title = flagItemsCreateTitle.Get(cmd, false)
+		}
+		if flagItemsCreateTags.Changed(cmd) {
+			tags := qiita.TagsFromStrings(*flagItemsCreateTags.Get(cmd, false))
+			params.Tags = &tags
+		}
+		if flagItemsCreateBody.Changed(cmd) {
+			params.Body = flagItemsCreateBody.Get(cmd, false)
+		}
+		if flagItemsCreatePrivate.Changed(cmd) {
+			params.Private = flagItemsCreatePrivate.Get(cmd, false)
+		}
+		if flagItemsCreateTweet.Changed(cmd) {
+			params.Tweet = flagItemsCreateTweet.Get(cmd, false)
+		}
+
+		item, err := cl.CreateItem(params)
+		if err != nil {
+			return err
+		}
+
+		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
+			return err
+		}
+		return nil
+	},
+}

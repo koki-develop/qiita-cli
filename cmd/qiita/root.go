@@ -51,6 +51,7 @@ func init() {
 		itemsSearchCmd, // items search
 		itemsListCmd,   // items list
 		itemsGetCmd,    // items get
+		itemsCreateCmd, // items create
 	)
 
 	/*
@@ -86,6 +87,17 @@ func init() {
 		flagFormat,      // --format
 		flagItemColumns, // --columns
 	}.AddTo(itemsGetCmd)
+
+	/* items create */
+	flags.Flags{
+		flagFormat,             // --format
+		flagItemColumns,        // --columns
+		flagItemsCreateTitle,   // --title
+		flagItemsCreateTags,    // --tags
+		flagItemsCreateBody,    // --body
+		flagItemsCreatePrivate, // --private
+		flagItemsCreateTweet,   // --tweet
+	}.AddTo(itemsCreateCmd)
 }
 
 func loadConfig() (*config.Config, error) {
