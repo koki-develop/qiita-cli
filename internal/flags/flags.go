@@ -26,6 +26,7 @@ type Flag struct {
 	Name        string
 	ShortName   string
 	Description string
+	Required    bool
 }
 
 func (f *Flag) Changed(cmd *cobra.Command) bool {
@@ -44,6 +45,11 @@ func (f *String) AddTo(cmds ...*cobra.Command) {
 			cmd.Flags().StringVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
 		} else {
 			cmd.Flags().StringVar(&f.value, f.Name, f.Default, f.Description)
+		}
+		if f.Required {
+			if err := cmd.MarkFlagRequired(f.Name); err != nil {
+				panic(err)
+			}
 		}
 	}
 }
@@ -68,6 +74,11 @@ func (f *Int) AddTo(cmds ...*cobra.Command) {
 		} else {
 			cmd.Flags().IntVar(&f.value, f.Name, f.Default, f.Description)
 		}
+		if f.Required {
+			if err := cmd.MarkFlagRequired(f.Name); err != nil {
+				panic(err)
+			}
+		}
 	}
 }
 
@@ -90,6 +101,11 @@ func (f *StringSlice) AddTo(cmds ...*cobra.Command) {
 			cmd.Flags().StringSliceVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
 		} else {
 			cmd.Flags().StringSliceVar(&f.value, f.Name, f.Default, f.Description)
+		}
+		if f.Required {
+			if err := cmd.MarkFlagRequired(f.Name); err != nil {
+				panic(err)
+			}
 		}
 	}
 }
