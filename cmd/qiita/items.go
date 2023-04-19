@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"os"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
@@ -148,6 +149,10 @@ var itemsCreateCmd = &cobra.Command{
 			return err
 		}
 
+		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
+			return errors.New("`--write` can be used when `--file` is set")
+		}
+
 		p, err := printers.Get(*flagFormat.Get(cmd, true))
 		if err != nil {
 			return err
@@ -196,7 +201,7 @@ var itemsCreateCmd = &cobra.Command{
 			return err
 		}
 
-		if flagItemsCreateFile.Changed(cmd) {
+		if *flagItemsCreateWrite.Get(cmd, true) && flagItemsCreateFile.Changed(cmd) {
 			fm := itemFrontMatter{
 				ID:      util.String(item.ID()),
 				Title:   util.String(item.Title()),

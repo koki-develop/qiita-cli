@@ -93,6 +93,7 @@ func init() {
 		flagFormat,             // --format
 		flagItemColumns,        // --columns
 		flagItemsCreateFile,    // --file
+		flagItemsCreateWrite,   // --write
 		flagItemsCreateTitle,   // --title
 		flagItemsCreateTags,    // --tags
 		flagItemsCreateBody,    // --body

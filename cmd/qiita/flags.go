@@ -82,6 +82,12 @@ var (
 		Description: "create an item from a file",
 	}}
 
+	// --write
+	flagItemsCreateWrite = &flags.Bool{Flag: &flags.Flag{
+		Name:        "write",
+		Description: "write information about the created item to a file",
+	}}
+
 	// --title
 	flagItemsCreateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
