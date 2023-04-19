@@ -76,6 +76,12 @@ var (
 
 // items create
 var (
+	// --file
+	flagItemsCreateFile = &flags.String{Flag: &flags.Flag{
+		Name:        "file",
+		Description: "create an item from a file",
+	}}
+
 	// --title
 	flagItemsCreateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
