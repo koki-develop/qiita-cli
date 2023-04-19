@@ -30,3 +30,9 @@ func (items Items) TableRows() []map[string]interface{} {
 	}
 	return rows
 }
+
+type Tag struct {
+	Name string `json:"name"`
+}
+
+type Tags []*Tag
