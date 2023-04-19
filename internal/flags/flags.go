@@ -89,6 +89,34 @@ func (f *Int) Get(cmd *cobra.Command, nonnull bool) *int {
 	return nil
 }
 
+type Bool struct {
+	*Flag
+	Default bool
+	value   bool
+}
+
+func (f *Bool) AddTo(cmds ...*cobra.Command) {
+	for _, cmd := range cmds {
+		if f.ShortName != "" {
+			cmd.Flags().BoolVarP(&f.value, f.Name, f.ShortName, f.Default, f.Description)
+		} else {
+			cmd.Flags().BoolVar(&f.value, f.Name, f.Default, f.Description)
+		}
+		if f.Required {
+			if err := cmd.MarkFlagRequired(f.Name); err != nil {
+				panic(err)
+			}
+		}
+	}
+}
+
+func (f *Bool) Get(cmd *cobra.Command, nonnull bool) *bool {
+	if nonnull || f.Changed(cmd) {
+		return &f.value
+	}
+	return nil
+}
+
 type StringSlice struct {
 	*Flag
 	Default []string
