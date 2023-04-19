@@ -49,12 +49,13 @@ func init() {
 	)
 	itemsCmd.AddCommand(
 		itemsSearchCmd, // items search
+		itemsListCmd,   // items list
 	)
 
 	/*
 	 * flags
 	 */
-	for _, cmd := range []*cobra.Command{rootCmd, itemsCmd, itemsSearchCmd} {
+	for _, cmd := range []*cobra.Command{rootCmd, itemsCmd, itemsSearchCmd, itemsListCmd} {
 		cmd.Flags().SortFlags = false
 	}
 
@@ -64,6 +65,7 @@ func init() {
 	}.AddTo(
 		// items
 		itemsSearchCmd, // items search
+		itemsListCmd,   // items list
 	)
 
 	/* configure */
@@ -77,6 +79,7 @@ func init() {
 		flagItemColumns, // --columns
 	}.AddTo(
 		itemsSearchCmd, // items search
+		itemsListCmd,   // items list
 	)
 
 	/* items search */
@@ -85,6 +88,12 @@ func init() {
 		flagItemsSearchPerPage, // --per-page
 		flagItemsSearchQuery,   // --query
 	}.AddTo(itemsSearchCmd)
+
+	/* items list */
+	flags.Flags{
+		flagItemsListPage,    // --page
+		flagItemsListPerPage, // --per-page
+	}.AddTo(itemsListCmd)
 }
 
 func loadConfig() (*config.Config, error) {

@@ -73,3 +73,20 @@ var (
 		Description: "search query"},
 	}
 )
+
+// items list
+var (
+	// --page
+	flagItemsListPage = &flags.Int{Flag: &flags.Flag{
+		Name:        "page",
+		Description: "page number (from 1 to 100)"},
+		Default: 1,
+	}
+
+	// --per-page
+	flagItemsListPerPage = &flags.Int{Flag: &flags.Flag{
+		Name:        "per-page",
+		Description: "records count per page (from 1 to 100)"},
+		Default: 100,
+	}
+)

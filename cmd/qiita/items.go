@@ -49,3 +49,37 @@ var itemsSearchCmd = &cobra.Command{
 		return nil
 	},
 }
+
+var itemsListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "list own items",
+	Long:  "list own items.",
+	Args:  cobra.ExactArgs(0),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
+		p, err := printers.Get(*flagFormat.Get(cmd, true))
+		if err != nil {
+			return err
+		}
+
+		cl := qiita.New(cfg.AccessToken)
+
+		params := &qiita.ListAuthenticatedUserItemsParameters{
+			Page:    flagItemsListPage.Get(cmd, true),
+			PerPage: flagItemsListPerPage.Get(cmd, true),
+		}
+		items, err := cl.ListAuthenticatedUserItems(params)
+		if err != nil {
+			return err
+		}
+
+		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), items); err != nil {
+			return err
+		}
+		return nil
+	},
+}
