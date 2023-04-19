@@ -32,13 +32,7 @@ func (item Item) Tags() Tags {
 
 func (item Item) TableRows() []map[string]interface{} {
 	item["user"] = item["user"].(map[string]interface{})["id"]
-
-	tags := item["tags"].([]interface{})
-	tagNames := make([]string, len(tags))
-	for i, t := range tags {
-		tagNames[i] = t.(map[string]interface{})["name"].(string)
-	}
-	item["tags"] = tagNames
+	item["tags"] = item.Tags().Names()
 
 	return []map[string]interface{}{item}
 }
