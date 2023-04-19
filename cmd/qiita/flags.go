@@ -73,3 +73,36 @@ var (
 		Description: "search query"},
 	}
 )
+
+// items create
+var (
+	// --title
+	flagItemsCreateTitle = &flags.String{Flag: &flags.Flag{
+		Name:        "title",
+		Description: "the title of the item to be created",
+	}}
+
+	// --tags
+	flagItemsCreateTags = &flags.StringSlice{Flag: &flags.Flag{
+		Name:        "tags",
+		Description: "a list of tags"},
+	}
+
+	// --body
+	flagItemsCreateBody = &flags.String{Flag: &flags.Flag{
+		Name:        "body",
+		Description: "item body in markdown"},
+	}
+
+	// --private
+	flagItemsCreatePrivate = &flags.Bool{Flag: &flags.Flag{
+		Name:        "private",
+		Description: "whether the item to be created is private"},
+	}
+
+	// --tweet
+	flagItemsCreateTweet = &flags.Bool{Flag: &flags.Flag{
+		Name:        "tweet",
+		Description: "whether to post a tweet"},
+	}
+)
