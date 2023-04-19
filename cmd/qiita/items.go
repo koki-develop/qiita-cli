@@ -37,8 +37,8 @@ var itemsCmd = &cobra.Command{
 
 var itemsSearchCmd = &cobra.Command{
 	Use:   "search",
-	Short: "search items",
-	Long:  "search items.",
+	Short: "Search items",
+	Long:  "Search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := loadConfig()
@@ -73,8 +73,8 @@ var itemsSearchCmd = &cobra.Command{
 
 var itemsListCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list own items",
-	Long:  "list own items.",
+	Short: "List own items",
+	Long:  "List own items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := loadConfig()
@@ -107,8 +107,8 @@ var itemsListCmd = &cobra.Command{
 
 var itemsGetCmd = &cobra.Command{
 	Use:   "get [id]",
-	Short: "get an item",
-	Long:  "get an item.",
+	Short: "Get an item",
+	Long:  "Get an item.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id := args[0]
@@ -139,8 +139,8 @@ var itemsGetCmd = &cobra.Command{
 
 var itemsCreateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create an item",
-	Long:  "create an item.",
+	Short: "Create an item",
+	Long:  "Create an item.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := loadConfig()
