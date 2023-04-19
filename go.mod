@@ -7,6 +7,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.7.0
 	golang.org/x/term v0.7.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
