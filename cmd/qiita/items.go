@@ -1,15 +1,31 @@
 package main
 
 import (
-	"io"
 	"os"
-	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
 )
+
+type itemFrontMatter struct {
+	Title   *string   `yaml:"title,omitempty"`
+	Tags    *[]string `yaml:"tags,omitempty"`
+	Private *bool     `yaml:"private,omitempty"`
+}
+
+func (fm *itemFrontMatter) QiitaTags() *qiita.Tags {
+	if fm.Tags == nil {
+		return nil
+	}
+
+	var tags qiita.Tags
+	for _, t := range *fm.Tags {
+		tags = append(tags, &qiita.Tag{Name: t})
+	}
+	return &tags
+}
 
 var itemsCmd = &cobra.Command{
 	Use:   "items",
@@ -144,11 +160,16 @@ var itemsCreateCmd = &cobra.Command{
 				return err
 			}
 			defer f.Close()
-			var s strings.Builder
-			if _, err := io.Copy(&s, f); err != nil {
+
+			var fm itemFrontMatter
+			md, err := util.ReadMarkdown(f, &fm)
+			if err != nil {
 				return err
 			}
-			params.Body = util.String(s.String())
+			params.Title = fm.Title
+			params.Tags = fm.QiitaTags()
+			params.Body = &md
+			params.Private = fm.Private
 		}
 
 		if flagItemsCreateTitle.Changed(cmd) {
