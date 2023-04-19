@@ -42,11 +42,11 @@ func init() {
 	 * commands
 	 */
 
-	/* items */
 	rootCmd.AddCommand(
 		configureCmd, // configure
 		itemsCmd,     // items
 	)
+	/* items */
 	itemsCmd.AddCommand(
 		itemsSearchCmd, // items search
 		itemsListCmd,   // items list
@@ -55,9 +55,7 @@ func init() {
 	/*
 	 * flags
 	 */
-	for _, cmd := range []*cobra.Command{rootCmd, itemsCmd, itemsSearchCmd, itemsListCmd} {
-		cmd.Flags().SortFlags = false
-	}
+	disableSortFlags(rootCmd)
 
 	/* common */
 	flags.Flags{
@@ -104,4 +102,11 @@ func loadConfig() (*config.Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func disableSortFlags(cmd *cobra.Command) {
+	cmd.Flags().SortFlags = false
+	for _, child := range cmd.Commands() {
+		disableSortFlags(child)
+	}
 }
