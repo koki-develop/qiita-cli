@@ -50,6 +50,7 @@ func init() {
 	itemsCmd.AddCommand(
 		itemsSearchCmd, // items search
 		itemsListCmd,   // items list
+		itemsGetCmd,    // items get
 	)
 
 	/*
@@ -79,6 +80,12 @@ func init() {
 		flagPage,        // --page
 		flagPerPage,     // --per-page
 	}.AddTo(itemsListCmd)
+
+	/* items get */
+	flags.Flags{
+		flagFormat,      // --format
+		flagItemColumns, // --columns
+	}.AddTo(itemsGetCmd)
 }
 
 func loadConfig() (*config.Config, error) {

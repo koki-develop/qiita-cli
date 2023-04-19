@@ -1,6 +1,9 @@
 package qiita
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type ListItemsParameters struct {
 	Page    *int    `url:"page,omitempty"`
@@ -39,4 +42,18 @@ func (cl *Client) ListAuthenticatedUserItems(p *ListAuthenticatedUserItemsParame
 	}
 
 	return items, nil
+}
+
+func (cl *Client) GetItem(id string) (*Item, error) {
+	req, err := cl.newRequest(http.MethodGet, fmt.Sprintf("items/%s", id), nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var item Item
+	if err := cl.doRequest(req, &item); err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
