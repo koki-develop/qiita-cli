@@ -33,6 +33,26 @@ func Path() (string, error) {
 	return path.Join(d, "config.yaml"), nil
 }
 
+func Load() (*Config, error) {
+	p, err := Path()
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := os.Open(p)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var cfg Config
+	if err := yaml.NewDecoder(f).Decode(&cfg); err != nil {
+		return nil, err
+	}
+
+	return &cfg, nil
+}
+
 func Configure(cfg *Config) error {
 	if cfg.AccessToken == "" {
 		fmt.Print("Qiita Access Token:")
