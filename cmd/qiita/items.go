@@ -7,11 +7,13 @@ import (
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 )
 
 type itemFrontMatter struct {
+	ID      *string   `yaml:"id,omitempty"`
 	Title   *string   `yaml:"title,omitempty"`
-	Tags    *[]string `yaml:"tags,omitempty"`
+	Tags    *[]string `yaml:"tags,flow,omitempty"`
 	Private *bool     `yaml:"private,omitempty"`
 }
 
@@ -155,7 +157,7 @@ var itemsCreateCmd = &cobra.Command{
 
 		params := &qiita.CreateItemParameters{}
 		if flagItemsCreateFile.Changed(cmd) {
-			f, err := os.Open(*flagItemsCreateFile.Get(cmd, false))
+			f, err := os.Open(*flagItemsCreateFile.Get(cmd, true))
 			if err != nil {
 				return err
 			}
@@ -173,20 +175,20 @@ var itemsCreateCmd = &cobra.Command{
 		}
 
 		if flagItemsCreateTitle.Changed(cmd) {
-			params.Title = flagItemsCreateTitle.Get(cmd, false)
+			params.Title = flagItemsCreateTitle.Get(cmd, true)
 		}
 		if flagItemsCreateTags.Changed(cmd) {
-			tags := qiita.TagsFromStrings(*flagItemsCreateTags.Get(cmd, false))
+			tags := qiita.TagsFromStrings(*flagItemsCreateTags.Get(cmd, true))
 			params.Tags = &tags
 		}
 		if flagItemsCreateBody.Changed(cmd) {
-			params.Body = flagItemsCreateBody.Get(cmd, false)
+			params.Body = flagItemsCreateBody.Get(cmd, true)
 		}
 		if flagItemsCreatePrivate.Changed(cmd) {
-			params.Private = flagItemsCreatePrivate.Get(cmd, false)
+			params.Private = flagItemsCreatePrivate.Get(cmd, true)
 		}
 		if flagItemsCreateTweet.Changed(cmd) {
-			params.Tweet = flagItemsCreateTweet.Get(cmd, false)
+			params.Tweet = flagItemsCreateTweet.Get(cmd, true)
 		}
 
 		item, err := cl.CreateItem(params)
@@ -194,9 +196,32 @@ var itemsCreateCmd = &cobra.Command{
 			return err
 		}
 
+		if flagItemsCreateFile.Changed(cmd) {
+			fm := itemFrontMatter{
+				ID:      util.String(item.ID()),
+				Title:   util.String(item.Title()),
+				Tags:    util.Strings(item.Tags().Names()),
+				Private: util.Bool(item.Private()),
+			}
+			y, err := yaml.Marshal(fm)
+			if err != nil {
+				return err
+			}
+			f, err := os.Create(*flagItemsCreateFile.Get(cmd, true))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			f.WriteString("---\n")
+			f.Write(y)
+			f.WriteString("---\n\n")
+			f.WriteString(item.Body())
+		}
+
 		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
 			return err
 		}
+
 		return nil
 	},
 }
