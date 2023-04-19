@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"runtime/debug"
 
+	"github.com/koki-develop/qiita-cli/internal/config"
 	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/spf13/cobra"
 )
@@ -83,4 +85,14 @@ func init() {
 		flagItemsSearchPerPage, // --per-page
 		flagItemsSearchQuery,   // --query
 	}.AddTo(itemsSearchCmd)
+}
+
+func loadConfig() (*config.Config, error) {
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Failed to load config.\nIf you have not configured yet, please run `qiita configure`.")
+		return nil, err
+	}
+
+	return cfg, nil
 }

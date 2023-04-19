@@ -20,12 +20,17 @@ var itemsSearchCmd = &cobra.Command{
 	Long:  "search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
 		p, err := printers.Get(*flagFormat.Get(cmd, true))
 		if err != nil {
 			return err
 		}
 
-		cl := qiita.New("")
+		cl := qiita.New(cfg.AccessToken)
 
 		params := &qiita.ListItemsParameters{
 			Page:    flagItemsSearchPage.Get(cmd, true),
