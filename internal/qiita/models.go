@@ -30,6 +30,14 @@ func (item Item) Tags() Tags {
 	return rtn
 }
 
+func (item Item) Body() string {
+	return item["body"].(string)
+}
+
+func (item Item) Private() bool {
+	return item["private"].(bool)
+}
+
 func (item Item) TableRows() []map[string]interface{} {
 	item["user"] = item["user"].(map[string]interface{})["id"]
 	item["tags"] = item.Tags().Names()
