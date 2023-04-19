@@ -228,6 +228,16 @@ var itemsCreateCmd = &cobra.Command{
 	},
 }
 
+var itemsUpdateCmd = &cobra.Command{
+	Use:   "update [id]",
+	Short: "Update an item",
+	Long:  "Update an item.",
+	Args:  cobra.MaximumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
+}
+
 var itemsDeleteCmd = &cobra.Command{
 	Use:   "delete [id]",
 	Short: "Delete an item",

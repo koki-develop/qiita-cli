@@ -52,6 +52,7 @@ func init() {
 		itemsListCmd,   // items list
 		itemsGetCmd,    // items get
 		itemsCreateCmd, // items create
+		itemsUpdateCmd, // items update
 		itemsDeleteCmd, // items delete
 	)
 
@@ -101,6 +102,12 @@ func init() {
 		flagItemsCreatePrivate, // --private
 		flagItemsCreateTweet,   // --tweet
 	}.AddTo(itemsCreateCmd)
+
+	/* items update */
+	flags.Flags{
+		flagFormat,      // --format
+		flagItemColumns, // --columns
+	}.AddTo(itemsUpdateCmd)
 }
 
 func loadConfig() (*config.Config, error) {
