@@ -36,3 +36,11 @@ type Tag struct {
 }
 
 type Tags []*Tag
+
+func TagsFromStrings(ss []string) Tags {
+	tags := make(Tags, len(ss))
+	for i, s := range ss {
+		tags[i] = &Tag{Name: s}
+	}
+	return tags
+}
