@@ -173,6 +173,9 @@ var itemsCreateCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+			if fm.ID != nil {
+				return errors.New("id cannot be set when creating an item")
+			}
 			params.Title = fm.Title
 			params.Tags = fm.QiitaTags()
 			params.Body = &md
