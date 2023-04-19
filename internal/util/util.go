@@ -25,3 +25,11 @@ func Pad(s string, length int) string {
 	}
 	return s
 }
+
+func String(s string) *string {
+	return &s
+}
+
+func Strings(ss []string) *[]string {
+	return &ss
+}
