@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	AccessToken string `yaml:"access_token"`
+	Format      string `yaml:"format"`
 }
 
 func Dir() (string, error) {
@@ -41,6 +42,14 @@ func Configure(cfg *Config) error {
 		}
 		fmt.Println()
 		cfg.AccessToken = string(passwd)
+	}
+	if cfg.Format == "" {
+		var f string
+		fmt.Print("Default Output Format: ")
+		if _, err := fmt.Scanln(&f); err != nil {
+			return err
+		}
+		cfg.Format = f
 	}
 
 	y, err := yaml.Marshal(cfg)

@@ -67,6 +67,7 @@ func init() {
 	/* configure */
 	flags.Flags{
 		flagConfigureAccessToken, // --access-token
+		flagConfigureFormat,      // --format
 	}.AddTo(configureCmd)
 
 	/* items */

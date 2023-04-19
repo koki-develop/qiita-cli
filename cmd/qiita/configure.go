@@ -10,6 +10,7 @@ var configureCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg := &config.Config{
 			AccessToken: *flagConfigureAccessToken.Get(cmd, true),
+			Format:      *flagConfigureFormat.Get(cmd, true),
 		}
 		if err := config.Configure(cfg); err != nil {
 			return err

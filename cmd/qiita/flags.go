@@ -24,6 +24,10 @@ var (
 		Name:        "access-token",
 		Description: "qiita access token"},
 	}
+	flagConfigureFormat = &flags.String{Flag: &flags.Flag{
+		Name:        "format",
+		Description: "default output format"},
+	}
 )
 
 // items
