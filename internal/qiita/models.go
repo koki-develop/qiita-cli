@@ -10,6 +10,26 @@ var (
 type Item map[string]interface{}
 type Items []Item
 
+func (item Item) ID() string {
+	return item["id"].(string)
+}
+
+func (item Item) Title() string {
+	return item["title"].(string)
+}
+
+func (item Item) Tags() Tags {
+	tags := item["tags"].([]interface{})
+	rtn := make(Tags, len(tags))
+	for i, t := range tags {
+		rtn[i] = &Tag{
+			Name: t.(map[string]interface{})["name"].(string),
+		}
+	}
+
+	return rtn
+}
+
 func (item Item) TableRows() []map[string]interface{} {
 	item["user"] = item["user"].(map[string]interface{})["id"]
 
