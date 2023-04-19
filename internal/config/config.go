@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"syscall"
 
+	"github.com/koki-develop/qiita-cli/internal/printers"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
@@ -65,7 +67,7 @@ func Configure(cfg *Config) error {
 	}
 	if cfg.Format == "" {
 		var f string
-		fmt.Print("Default Output Format: ")
+		fmt.Printf("Default Output Format (%s): ", strings.Join(printers.ListFormats(), "|"))
 		if _, err := fmt.Scanln(&f); err != nil {
 			return err
 		}
