@@ -107,6 +107,7 @@ func init() {
 	flags.Flags{
 		flagFormat,             // --format
 		flagItemColumns,        // --columns
+		flagItemsUpdateFile,    // --file
 		flagItemsUpdateTitle,   // --title
 		flagItemsUpdateTags,    // --tags
 		flagItemsUpdateBody,    // --body

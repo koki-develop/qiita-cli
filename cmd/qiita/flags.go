@@ -121,6 +121,12 @@ var (
 
 // items update
 var (
+	// --file
+	flagItemsUpdateFile = &flags.String{Flag: &flags.Flag{
+		Name:        "file",
+		Description: "update an item from a file",
+	}}
+
 	// --title
 	flagItemsUpdateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
