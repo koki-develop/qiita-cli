@@ -239,6 +239,10 @@ var itemsUpdateCmd = &cobra.Command{
 			return err
 		}
 
+		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
+			return errors.New("`--write` can be used when `--file` is set")
+		}
+
 		p, err := printers.Get(*flagFormat.Get(cmd, true))
 		if err != nil {
 			return err
@@ -293,6 +297,23 @@ var itemsUpdateCmd = &cobra.Command{
 		item, err := cl.UpdateItem(id, params)
 		if err != nil {
 			return err
+		}
+
+		if *flagItemsUpdateWrite.Get(cmd, true) && flagItemsUpdateFile.Changed(cmd) {
+			fm := itemFrontMatter{
+				ID:      util.String(item.ID()),
+				Title:   util.String(item.Title()),
+				Tags:    util.Strings(item.Tags().Names()),
+				Private: util.Bool(item.Private()),
+			}
+			f, err := os.Create(*flagItemsUpdateFile.Get(cmd, true))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+				return err
+			}
 		}
 
 		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
