@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
@@ -412,6 +413,11 @@ var itemsPullCmd = &cobra.Command{
 			items = append(items, item)
 		}
 
+		out := *flagItemsPullOut.Get(cmd, true)
+		if err := os.MkdirAll(out, os.ModePerm); err != nil {
+			return err
+		}
+
 		for _, item := range items {
 			fm := itemFrontMatter{
 				ID:      util.String(item.ID()),
@@ -419,7 +425,8 @@ var itemsPullCmd = &cobra.Command{
 				Tags:    util.Strings(item.Tags().Names()),
 				Private: util.Bool(item.Private()),
 			}
-			f, err := util.CreateFile(fmt.Sprintf("%s.md", item.ID()))
+			filename := path.Join(out, fmt.Sprintf("%s.md", item.ID()))
+			f, err := util.CreateFile(filename)
 			if err != nil {
 				return err
 			}
