@@ -395,6 +395,40 @@ var itemsPullCmd = &cobra.Command{
 	Short: "Download items",
 	Long:  "Download items.",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := loadConfig()
+		if err != nil {
+			return err
+		}
+
+		cl := qiita.New(cfg.AccessToken)
+
+		var items qiita.Items
+
+		for _, id := range args {
+			item, err := cl.GetItem(id)
+			if err != nil {
+				return err
+			}
+			items = append(items, item)
+		}
+
+		for _, item := range items {
+			fm := itemFrontMatter{
+				ID:      util.String(item.ID()),
+				Title:   util.String(item.Title()),
+				Tags:    util.Strings(item.Tags().Names()),
+				Private: util.Bool(item.Private()),
+			}
+			f, err := util.CreateFile(fmt.Sprintf("%s.md", item.ID()))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+				return err
+			}
+		}
+
 		return nil
 	},
 }
