@@ -3,12 +3,19 @@ package util
 import (
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 )
 
 func CreateFile(filename string) (*os.File, error) {
+	out := filename
+	dir := filepath.Dir(filename)
+	ext := filepath.Ext(filename)
+	base := filepath.Base(filename)
+	base = base[:len(base)-len(ext)]
+
 	for i := 0; ; i++ {
-		ex, err := Exists(filename)
+		ex, err := Exists(out)
 		if err != nil {
 			return nil, err
 		}
@@ -16,13 +23,10 @@ func CreateFile(filename string) (*os.File, error) {
 			break
 		}
 
-		base := filepath.Base(filename)
-		ext := filepath.Ext(filename)
-		base = base[:len(base)-len(ext)]
-		filename = fmt.Sprintf("%s(%d)%s", base, i, ext)
+		out = path.Join(dir, fmt.Sprintf("%s(%d)%s", base, i, ext))
 	}
 
-	f, err := os.Create(filename)
+	f, err := os.Create(out)
 	if err != nil {
 		return nil, err
 	}
