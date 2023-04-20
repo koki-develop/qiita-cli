@@ -178,3 +178,14 @@ var (
 		Description: "whether the item is private"},
 	}
 )
+
+// items pull
+var (
+	// --out
+	flagItemsPullOut = &flags.String{Flag: &flags.Flag{
+		Name:        "out",
+		ShortName:   "o",
+		Description: "output directory path",
+		Required:    true},
+	}
+)

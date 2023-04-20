@@ -123,6 +123,11 @@ func init() {
 		flagItemsNewTags,    // --tags
 		flagItemsNewPrivate, // --private
 	}.AddTo(itemsNewCmd)
+
+	/* items pull */
+	flags.Flags{
+		flagItemsPullOut, // --out
+	}.AddTo(itemsPullCmd)
 }
 
 func loadConfig() (*config.Config, error) {
