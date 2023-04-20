@@ -108,6 +108,7 @@ func init() {
 		flagFormat,             // --format
 		flagItemColumns,        // --columns
 		flagItemsUpdateFile,    // --file
+		flagItemsUpdateWrite,   // --write
 		flagItemsUpdateTitle,   // --title
 		flagItemsUpdateTags,    // --tags
 		flagItemsUpdateBody,    // --body

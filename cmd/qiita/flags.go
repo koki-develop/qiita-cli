@@ -127,21 +127,30 @@ var (
 		Description: "update an item from a file",
 	}}
 
+	// --write
+	flagItemsUpdateWrite = &flags.Bool{Flag: &flags.Flag{
+		Name:        "write",
+		Description: "write information about the updated item to a file",
+	}}
+
 	// --title
 	flagItemsUpdateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
 		Description: "the title of the item",
 	}}
+
 	// --tags
 	flagItemsUpdateTags = &flags.StringSlice{Flag: &flags.Flag{
 		Name:        "tags",
 		Description: "a list of tags"},
 	}
+
 	// --body
 	flagItemsUpdateBody = &flags.String{Flag: &flags.Flag{
 		Name:        "body",
 		Description: "item body in markdown"},
 	}
+
 	// --private
 	flagItemsUpdatePrivate = &flags.Bool{Flag: &flags.Flag{
 		Name:        "private",
