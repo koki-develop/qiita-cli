@@ -248,6 +248,28 @@ var itemsUpdateCmd = &cobra.Command{
 
 		var id string
 		params := &qiita.UpdateItemParameters{}
+
+		if flagItemsUpdateFile.Changed(cmd) {
+			f, err := os.Open(*flagItemsUpdateFile.Get(cmd, true))
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+
+			var fm itemFrontMatter
+			md, err := util.ReadMarkdown(f, &fm)
+			if err != nil {
+				return err
+			}
+			if fm.ID != nil {
+				id = *fm.ID
+			}
+			params.Title = fm.Title
+			params.Tags = fm.QiitaTags()
+			params.Body = &md
+			params.Private = fm.Private
+		}
+
 		if len(args) > 0 {
 			id = args[0]
 		}
