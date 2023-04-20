@@ -408,8 +408,9 @@ var itemsPullCmd = &cobra.Command{
 
 		cl := qiita.New(cfg.AccessToken)
 
-		var items qiita.Items
+		fmt.Println("Pulling items...")
 
+		var items qiita.Items
 		if all {
 			for i := 0; i < 100; i++ {
 				p := &qiita.ListAuthenticatedUserItemsParameters{
@@ -458,6 +459,7 @@ var itemsPullCmd = &cobra.Command{
 			}
 		}
 
+		fmt.Println("Done.")
 		return nil
 	},
 }
