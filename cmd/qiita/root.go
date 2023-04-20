@@ -115,6 +115,13 @@ func init() {
 		flagItemsUpdateBody,    // --body
 		flagItemsUpdatePrivate, // --private
 	}.AddTo(itemsUpdateCmd)
+
+	/* items new */
+	flags.Flags{
+		flagItemsNewTitle,   // --title
+		flagItemsNewTags,    // --tags
+		flagItemsNewPrivate, // --private
+	}.AddTo(itemsNewCmd)
 }
 
 func loadConfig() (*config.Config, error) {

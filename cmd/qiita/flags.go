@@ -157,3 +157,24 @@ var (
 		Description: "whether the item is private"},
 	}
 )
+
+// items new
+var (
+	// --title
+	flagItemsNewTitle = &flags.String{Flag: &flags.Flag{
+		Name:        "title",
+		Description: "the title of the item"},
+	}
+
+	// --tags
+	flagItemsNewTags = &flags.StringSlice{Flag: &flags.Flag{
+		Name:        "tags",
+		Description: "a list of tags"},
+	}
+
+	// --private
+	flagItemsNewPrivate = &flags.Bool{Flag: &flags.Flag{
+		Name:        "private",
+		Description: "whether the item is private"},
+	}
+)

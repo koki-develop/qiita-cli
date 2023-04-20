@@ -375,9 +375,9 @@ var itemsNewCmd = &cobra.Command{
 		defer f.Close()
 
 		fm := itemFrontMatter{
-			Title:   util.String(""),
-			Tags:    util.Strings([]string{}),
-			Private: util.Bool(false),
+			Title:   flagItemsNewTitle.Get(cmd, true),
+			Tags:    flagItemsNewTags.Get(cmd, true),
+			Private: flagItemsNewPrivate.Get(cmd, true),
 		}
 
 		if err := util.WriteMarkdown(f, "", fm); err != nil {
