@@ -410,12 +410,29 @@ var itemsPullCmd = &cobra.Command{
 
 		var items qiita.Items
 
-		for _, id := range args {
-			item, err := cl.GetItem(id)
-			if err != nil {
-				return err
+		if all {
+			for i := 0; i < 100; i++ {
+				p := &qiita.ListAuthenticatedUserItemsParameters{
+					PerPage: util.Int(100),
+					Page:    util.Int(i + 1),
+				}
+				is, err := cl.ListAuthenticatedUserItems(p)
+				if err != nil {
+					return err
+				}
+				items = append(items, is...)
+				if len(is) < 100 {
+					break
+				}
 			}
-			items = append(items, item)
+		} else {
+			for _, id := range args {
+				item, err := cl.GetItem(id)
+				if err != nil {
+					return err
+				}
+				items = append(items, item)
+			}
 		}
 
 		out := *flagItemsPullOut.Get(cmd, true)
