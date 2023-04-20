@@ -396,6 +396,11 @@ var itemsPullCmd = &cobra.Command{
 	Short: "Download items",
 	Long:  "Download items.",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		all := *flagItemsPullAll.Get(cmd, true)
+		if all && len(args) > 0 {
+			return errors.New("cannot specify ids when --all is specified")
+		}
+
 		cfg, err := loadConfig()
 		if err != nil {
 			return err
