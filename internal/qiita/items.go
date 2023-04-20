@@ -44,7 +44,7 @@ func (cl *Client) ListAuthenticatedUserItems(p *ListAuthenticatedUserItemsParame
 	return items, nil
 }
 
-func (cl *Client) GetItem(id string) (*Item, error) {
+func (cl *Client) GetItem(id string) (Item, error) {
 	req, err := cl.newRequest(http.MethodGet, fmt.Sprintf("items/%s", id), nil, nil)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (cl *Client) GetItem(id string) (*Item, error) {
 		return nil, err
 	}
 
-	return &item, nil
+	return item, nil
 }
 
 type CreateItemParameters struct {
@@ -66,7 +66,7 @@ type CreateItemParameters struct {
 	Tweet   *bool   `json:"tweet,omitempty"`
 }
 
-func (cl *Client) CreateItem(params *CreateItemParameters) (*Item, error) {
+func (cl *Client) CreateItem(params *CreateItemParameters) (Item, error) {
 	req, err := cl.newRequest(http.MethodPost, "items", nil, params)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func (cl *Client) CreateItem(params *CreateItemParameters) (*Item, error) {
 		return nil, err
 	}
 
-	return &item, nil
+	return item, nil
 }
 
 type UpdateItemParameters struct {
@@ -87,7 +87,7 @@ type UpdateItemParameters struct {
 	Private *bool   `json:"private,omitempty"`
 }
 
-func (cl *Client) UpdateItem(id string, params *UpdateItemParameters) (*Item, error) {
+func (cl *Client) UpdateItem(id string, params *UpdateItemParameters) (Item, error) {
 	req, err := cl.newRequest(http.MethodPatch, fmt.Sprintf("items/%s", id), nil, params)
 	if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ func (cl *Client) UpdateItem(id string, params *UpdateItemParameters) (*Item, er
 		return nil, err
 	}
 
-	return &item, nil
+	return item, nil
 }
 
 func (cl *Client) DeleteItem(id string) error {
