@@ -389,3 +389,12 @@ var itemsNewCmd = &cobra.Command{
 		return nil
 	},
 }
+
+var itemsPullCmd = &cobra.Command{
+	Use:   "pull [ids...]",
+	Short: "Download items",
+	Long:  "Download items.",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
+}
