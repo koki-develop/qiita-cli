@@ -188,4 +188,10 @@ var (
 		Description: "output directory path",
 		Required:    true},
 	}
+
+	// --all
+	flagItemsPullAll = &flags.Bool{Flag: &flags.Flag{
+		Name:        "all",
+		Description: "pull all items",
+	}}
 )

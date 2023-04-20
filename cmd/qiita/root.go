@@ -127,6 +127,7 @@ func init() {
 	/* items pull */
 	flags.Flags{
 		flagItemsPullOut, // --out
+		flagItemsPullAll, // --all
 	}.AddTo(itemsPullCmd)
 }
 
