@@ -447,7 +447,7 @@ var itemsPullCmd = &cobra.Command{
 				Tags:    util.Strings(item.Tags().Names()),
 				Private: util.Bool(item.Private()),
 			}
-			filename := path.Join(out, fmt.Sprintf("%s.md", item.ID()))
+			filename := path.Join(out, fmt.Sprintf("%s.md", strings.ReplaceAll(*fm.Title, "/", "_")))
 			f, err := util.CreateFile(filename)
 			if err != nil {
 				return err
