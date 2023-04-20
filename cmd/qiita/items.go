@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
@@ -341,6 +343,48 @@ var itemsDeleteCmd = &cobra.Command{
 		if err := cl.DeleteItem(id); err != nil {
 			return err
 		}
+
+		return nil
+	},
+}
+
+var itemsNewCmd = &cobra.Command{
+	Use:   "new [file]",
+	Short: "Create a new item file",
+	Long:  "Create a new item file.",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		filename := args[0]
+		if !strings.HasSuffix(filename, ".md") {
+			filename += ".md"
+		}
+
+		// もしファイルが既に存在している場合はエラーを返す
+		if _, err := os.Stat(filename); err != nil {
+			if !os.IsNotExist(err) {
+				return err
+			}
+		} else {
+			return fmt.Errorf("file already exists: %s", filename)
+		}
+
+		f, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		fm := itemFrontMatter{
+			Title:   util.String(""),
+			Tags:    util.Strings([]string{}),
+			Private: util.Bool(false),
+		}
+
+		if err := util.WriteMarkdown(f, "", fm); err != nil {
+			return err
+		}
+
+		fmt.Printf("Created: %s\n", filename)
 
 		return nil
 	},
