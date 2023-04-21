@@ -33,9 +33,10 @@ func (fm *itemFrontMatter) QiitaTags() *qiita.Tags {
 }
 
 var itemsCmd = &cobra.Command{
-	Use:   "items",
-	Short: "Manage items",
-	Long:  "Manage items.",
+	Use:     "items",
+	Aliases: []string{"item"},
+	Short:   "Manage items",
+	Long:    "Manage items.",
 }
 
 var itemsSearchCmd = &cobra.Command{
