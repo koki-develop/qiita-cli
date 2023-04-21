@@ -6,7 +6,10 @@ import (
 )
 
 var configureCmd = &cobra.Command{
-	Use: "configure",
+	Use:   "configure",
+	Short: "Configure Qiita CLI",
+	Long:  "Configure Qiita CLI.",
+	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg := &config.Config{
 			AccessToken: *flagConfigureAccessToken.Get(cmd, true),
