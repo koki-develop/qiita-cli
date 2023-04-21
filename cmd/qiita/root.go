@@ -17,7 +17,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:          "qiita",
 	Short:        "CLI for Qiita",
-	Long:         "CLI for Qiita",
+	Long:         "CLI for Qiita.",
 	SilenceUsage: true,
 }
 
