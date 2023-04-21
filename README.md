@@ -10,22 +10,13 @@ Qiita CLI
 <a href="./LICENSE"><img src="https://img.shields.io/github/license/koki-develop/qiita-cli?style=flat-square" alt="LICENSE"></a>
 </p>
 
-<p align="center">
-🚧 WIP 🚧
-</p>
+## 目次
 
-<p align="center">
-CLI for <a href="https://qiita.com">Qiita</a>.
-</p>
+- [インストール](TODO)
+- [クイックスタート](TODO)
+- [ライセンス](TODO)
 
-## Contents
-
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [LICENSE](#license)
-
-## Installation
+## :zap: インストール
 
 ### Homebrew
 
@@ -39,18 +30,49 @@ $ brew install koki-develop/tap/qiita
 $ go install github.com/koki-develop/qiita-cli/cmd/qiita@latest
 ```
 
-### Releases
+### リリース
 
-Download the binary from the [releases page](https://github.com/koki-develop/qiita-cli/releases/latest).
+[リリースページ](https://github.com/koki-develop/qiita-cli/releases/latest)からバイナリをダウンロードしてください。
 
-## Getting Started
+## :beginner: クイックスタート
 
-🚧 WIP 🚧
+### 1. Qiita アクセストークンを発行
 
-## Usage
+[Qiita](https://qiita.com) にログイン後、[アクセストークンの発行ページ](https://qiita.com/settings/tokens/new)にアクセスしてください。  
+それぞれの項目を次のように入力します。
 
-🚧 WIP 🚧
+| 項目 | 説明 |
+| --- | --- |
+| `アクセストークンの説明` | 任意のテキスト。 |
+| `スコープ` | `read_qiita` と `write_qiita` を選択。 |
 
-## LICENSE
+入力後に `発行する` をクリックするとアクセストークンが発行されるため、ひかえておきます。
+
+### 2. Qiita CLI の設定
+
+まず Qiita CLI の設定を行います。  
+`qiita configure` を実行してアクセストークンとデフォルトの出力フォーマットを対話的に設定します。
+
+```sh
+$ qiita configure
+```
+
+これで Qiita CLI の準備は完了です！ :tada:
+
+### 3. 自分の記事一覧を表示する
+
+試しに Qiita CLI を使って自分の記事一覧を表示してみましょう。  
+`qiita items list` を実行します。
+
+```sh
+$ qiita items list
+```
+
+Qiita CLI の設定を正しく行えていればコンソール上にあなたの記事一覧が出力されるはずです！  
+
+他にも Qiita CLI は様々な操作を行うことができます。  
+詳しくは[使い方](./docs/usage.md)をご参照ください。
+
+## :memo: ライセンス
 
 [MIT](./LICENSE)
