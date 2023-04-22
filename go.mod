@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/fatih/color v1.15.0
 	github.com/google/go-github/v50 v50.2.0
+	github.com/google/go-github/v51 v51.0.0
 	github.com/google/go-querystring v1.1.0
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/spf13/cobra v1.7.0
