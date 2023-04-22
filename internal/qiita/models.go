@@ -17,6 +17,18 @@ type ItemFrontMatter struct {
 	Private *bool     `yaml:"private,omitempty"`
 }
 
+func (fm ItemFrontMatter) QiitaTags() *Tags {
+	if fm.Tags == nil {
+		return nil
+	}
+
+	var tags Tags
+	for _, t := range *fm.Tags {
+		tags = append(tags, &Tag{Name: t})
+	}
+	return &tags
+}
+
 type Item map[string]interface{}
 type Items []Item
 
