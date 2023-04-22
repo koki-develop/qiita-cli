@@ -21,7 +21,7 @@ var itemsCmd = &cobra.Command{
 }
 
 func newItemsCLI(cmd *cobra.Command) (*cli.CLI, error) {
-	return newCLI(cmd, flagItemColumns)
+	return newCLI(cmd, flagItemsColumns)
 }
 
 var itemsSearchCmd = &cobra.Command{

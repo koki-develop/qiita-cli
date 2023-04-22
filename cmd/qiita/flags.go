@@ -46,7 +46,7 @@ var (
 // items
 var (
 	// --columns
-	flagItemColumns = &flags.StringSlice{Flag: &flags.Flag{
+	flagItemsColumns = &flags.StringSlice{Flag: &flags.Flag{
 		Name:        "columns",
 		Description: "properties that are going to be presented as columns (table format only)"},
 		Default: []string{"id", "title", "user", "url"},

@@ -74,7 +74,7 @@ func init() {
 	/* items search */
 	flags.Flags{
 		flagFormat,           // --format
-		flagItemColumns,      // --columns
+		flagItemsColumns,     // --columns
 		flagPage,             // --page
 		flagPerPage,          // --per-page
 		flagItemsSearchQuery, // --query
@@ -82,22 +82,22 @@ func init() {
 
 	/* items list */
 	flags.Flags{
-		flagFormat,      // --format
-		flagItemColumns, // --columns
-		flagPage,        // --page
-		flagPerPage,     // --per-page
+		flagFormat,       // --format
+		flagItemsColumns, // --columns
+		flagPage,         // --page
+		flagPerPage,      // --per-page
 	}.AddTo(itemsListCmd)
 
 	/* items get */
 	flags.Flags{
-		flagFormat,      // --format
-		flagItemColumns, // --columns
+		flagFormat,       // --format
+		flagItemsColumns, // --columns
 	}.AddTo(itemsGetCmd)
 
 	/* items create */
 	flags.Flags{
 		flagFormat,             // --format
-		flagItemColumns,        // --columns
+		flagItemsColumns,       // --columns
 		flagItemsCreateFile,    // --file
 		flagItemsCreateWrite,   // --write
 		flagItemsCreateTitle,   // --title
@@ -110,7 +110,7 @@ func init() {
 	/* items update */
 	flags.Flags{
 		flagFormat,             // --format
-		flagItemColumns,        // --columns
+		flagItemsColumns,       // --columns
 		flagItemsUpdateFile,    // --file
 		flagItemsUpdateWrite,   // --write
 		flagItemsUpdateTitle,   // --title
