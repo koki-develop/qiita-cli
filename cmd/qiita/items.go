@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -134,7 +133,7 @@ var itemsCreateCmd = &cobra.Command{
 		}
 
 		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
-			return errors.New("`--write` can be used when `--file` is set")
+			return ErrWriteWithoutFile
 		}
 
 		p, err := printers.Get(*flagFormat.Get(cmd, true))
@@ -158,7 +157,7 @@ var itemsCreateCmd = &cobra.Command{
 				return err
 			}
 			if fm.ID != nil {
-				return errors.New("id cannot be set when creating an item")
+				return ErrCreateWithID
 			}
 			params.Title = fm.Title
 			params.Tags = fm.QiitaTags()
@@ -219,7 +218,7 @@ var itemsUpdateCmd = &cobra.Command{
 		}
 
 		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
-			return errors.New("`--write` can be used when `--file` is set")
+			return ErrWriteWithoutFile
 		}
 
 		p, err := printers.Get(*flagFormat.Get(cmd, true))
@@ -257,7 +256,7 @@ var itemsUpdateCmd = &cobra.Command{
 			id = args[0]
 		}
 		if id == "" {
-			return errors.New("id must be specified")
+			return ErrIDRequired
 		}
 		if flagItemsUpdateTitle.Changed(cmd) {
 			params.Title = flagItemsUpdateTitle.Get(cmd, true)
@@ -368,7 +367,7 @@ var itemsPullCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		all := *flagItemsPullAll.Get(cmd, true)
 		if all && len(args) > 0 {
-			return errors.New("cannot specify ids when --all is specified")
+			return ErrIDsWithAll
 		}
 
 		cfg, err := loadConfig()
