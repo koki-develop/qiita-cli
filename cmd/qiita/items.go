@@ -83,28 +83,23 @@ var itemsGetCmd = &cobra.Command{
 	Long:  "Get an item.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		id := args[0]
-
-		cfg, err := loadConfig()
+		c, err := cli.New(&cli.Config{
+			Command:     cmd,
+			Writer:      os.Stdout,
+			ErrWriter:   os.Stderr,
+			FlagFormat:  flagFormat,      // --format
+			FlagColumns: flagItemColumns, // --columns
+		})
 		if err != nil {
 			return err
 		}
 
-		p, err := printers.Get(*flagFormat.Get(cmd, true))
-		if err != nil {
+		if err := c.ItemsGet(&cli.ItemsGetParameters{
+			Args: args,
+		}); err != nil {
 			return err
 		}
 
-		cl := qiita.New(cfg.AccessToken)
-
-		item, err := cl.GetItem(id)
-		if err != nil {
-			return err
-		}
-
-		if err := p.Print(os.Stdout, item); err != nil {
-			return err
-		}
 		return nil
 	},
 }

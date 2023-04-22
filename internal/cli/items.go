@@ -53,6 +53,26 @@ func (c *CLI) ItemsList(params *ItemsListParameters) error {
 	return nil
 }
 
+type ItemsGetParameters struct {
+	Args []string
+}
+
+// $ qiita items get
+func (c *CLI) ItemsGet(params *ItemsGetParameters) error {
+	id := params.Args[0]
+
+	item, err := c.client.GetItem(id)
+	if err != nil {
+		return err
+	}
+
+	if err := c.printer.Print(c.writer, item); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type ItemsCreateParameters struct {
 	FlagFile    *flags.String      // --file
 	FlagWrite   *flags.Bool        // --write
