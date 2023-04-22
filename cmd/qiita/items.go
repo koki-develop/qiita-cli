@@ -20,19 +20,17 @@ var itemsCmd = &cobra.Command{
 	Long:    "Manage items.",
 }
 
+func newItemsCLI(cmd *cobra.Command) (*cli.CLI, error) {
+	return newCLI(cmd, flagItemColumns)
+}
+
 var itemsSearchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search items",
 	Long:  "Search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := cli.New(&cli.Config{
-			Command:     cmd,
-			Writer:      os.Stdout,
-			ErrWriter:   os.Stderr,
-			FlagFormat:  flagFormat,      // --format
-			FlagColumns: flagItemColumns, // --columns
-		})
+		c, err := newItemsCLI(cmd)
 		if err != nil {
 			return err
 		}
@@ -55,13 +53,7 @@ var itemsListCmd = &cobra.Command{
 	Long:  "List own items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := cli.New(&cli.Config{
-			Command:     cmd,
-			Writer:      os.Stdout,
-			ErrWriter:   os.Stderr,
-			FlagFormat:  flagFormat,      // --format
-			FlagColumns: flagItemColumns, // --columns
-		})
+		c, err := newItemsCLI(cmd)
 		if err != nil {
 			return err
 		}
@@ -83,13 +75,7 @@ var itemsGetCmd = &cobra.Command{
 	Long:  "Get an item.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := cli.New(&cli.Config{
-			Command:     cmd,
-			Writer:      os.Stdout,
-			ErrWriter:   os.Stderr,
-			FlagFormat:  flagFormat,      // --format
-			FlagColumns: flagItemColumns, // --columns
-		})
+		c, err := newItemsCLI(cmd)
 		if err != nil {
 			return err
 		}
@@ -110,13 +96,7 @@ var itemsCreateCmd = &cobra.Command{
 	Long:  "Create an item.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := cli.New(&cli.Config{
-			Command:     cmd,
-			Writer:      os.Stdout,
-			ErrWriter:   os.Stderr,
-			FlagFormat:  flagFormat,      // --format
-			FlagColumns: flagItemColumns, // --columns
-		})
+		c, err := newItemsCLI(cmd)
 		if err != nil {
 			return err
 		}
