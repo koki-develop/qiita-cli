@@ -5,6 +5,7 @@ import (
 	"os"
 	"runtime/debug"
 
+	"github.com/koki-develop/qiita-cli/internal/cli"
 	"github.com/koki-develop/qiita-cli/internal/config"
 	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/koki-develop/qiita-cli/internal/notify"
@@ -149,4 +150,14 @@ func disableSortFlags(cmd *cobra.Command) {
 	for _, child := range cmd.Commands() {
 		disableSortFlags(child)
 	}
+}
+
+func newCLI(cmd *cobra.Command, columns *flags.StringSlice) (*cli.CLI, error) {
+	return cli.New(&cli.Config{
+		Command:     cmd,
+		Writer:      os.Stdout,
+		ErrWriter:   os.Stderr,
+		FlagFormat:  flagFormat, // --format
+		FlagColumns: columns,
+	})
 }
