@@ -30,8 +30,8 @@ var itemsSearchCmd = &cobra.Command{
 			Command:     cmd,
 			Writer:      os.Stdout,
 			ErrWriter:   os.Stderr,
-			FlagFormat:  flagFormat,
-			FlagColumns: flagItemColumns,
+			FlagFormat:  flagFormat,      // --format
+			FlagColumns: flagItemColumns, // --columns
 		})
 		if err != nil {
 			return err
@@ -121,82 +121,26 @@ var itemsCreateCmd = &cobra.Command{
 	Long:  "Create an item.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cfg, err := loadConfig()
+		c, err := cli.New(&cli.Config{
+			Command:     cmd,
+			Writer:      os.Stdout,
+			ErrWriter:   os.Stderr,
+			FlagFormat:  flagFormat,      // --format
+			FlagColumns: flagItemColumns, // --columns
+		})
 		if err != nil {
 			return err
 		}
 
-		// --file フラグを指定せずに --write フラグを指定した場合はエラー
-		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
-			return ErrWriteWithoutFile
-		}
-
-		p, err := printers.Get(*flagFormat.Get(cmd, true))
-		if err != nil {
-			return err
-		}
-
-		cl := qiita.New(cfg.AccessToken)
-
-		params := &qiita.CreateItemParameters{}
-
-		// --file フラグを指定した場合はファイルからパラメータを読み込む
-		if flagItemsCreateFile.Changed(cmd) {
-			f, err := os.Open(*flagItemsCreateFile.Get(cmd, true))
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-
-			var fm qiita.ItemFrontMatter
-			md, err := util.ReadMarkdown(f, &fm)
-			if err != nil {
-				return err
-			}
-			if fm.ID != nil {
-				return ErrCreateWithID
-			}
-			params.Title = fm.Title
-			params.Tags = fm.QiitaTags()
-			params.Body = &md
-			params.Private = fm.Private
-		}
-
-		if flagItemsCreateTitle.Changed(cmd) {
-			params.Title = flagItemsCreateTitle.Get(cmd, true)
-		}
-		if flagItemsCreateTags.Changed(cmd) {
-			tags := qiita.TagsFromStrings(*flagItemsCreateTags.Get(cmd, true))
-			params.Tags = &tags
-		}
-		if flagItemsCreateBody.Changed(cmd) {
-			params.Body = flagItemsCreateBody.Get(cmd, true)
-		}
-		if flagItemsCreatePrivate.Changed(cmd) {
-			params.Private = flagItemsCreatePrivate.Get(cmd, true)
-		}
-		if flagItemsCreateTweet.Changed(cmd) {
-			params.Tweet = flagItemsCreateTweet.Get(cmd, true)
-		}
-
-		item, err := cl.CreateItem(params)
-		if err != nil {
-			return err
-		}
-
-		// --write フラグを指定した場合はファイルを更新する
-		if *flagItemsCreateWrite.Get(cmd, true) && flagItemsCreateFile.Changed(cmd) {
-			f, err := os.Create(*flagItemsCreateFile.Get(cmd, true))
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
-				return err
-			}
-		}
-
-		if err := p.Print(os.Stdout, item); err != nil {
+		if err := c.ItemsCreate(&cli.ItemsCreateParameters{
+			FlagFile:    flagItemsCreateFile,    // --file
+			FlagWrite:   flagItemsCreateWrite,   // --write
+			FlagTitle:   flagItemsCreateTitle,   // --title
+			FlagBody:    flagItemsCreateBody,    // --body
+			FlagTags:    flagItemsCreateTags,    // --tags
+			FlagPrivate: flagItemsCreatePrivate, // --private
+			FlagTweet:   flagItemsCreateTweet,   // --tweet
+		}); err != nil {
 			return err
 		}
 
