@@ -132,6 +132,7 @@ var itemsCreateCmd = &cobra.Command{
 			return err
 		}
 
+		// --file フラグを指定せずに --write フラグを指定した場合はエラー
 		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
 			return ErrWriteWithoutFile
 		}
@@ -144,6 +145,8 @@ var itemsCreateCmd = &cobra.Command{
 		cl := qiita.New(cfg.AccessToken)
 
 		params := &qiita.CreateItemParameters{}
+
+		// --file フラグを指定した場合はファイルからパラメータを読み込む
 		if flagItemsCreateFile.Changed(cmd) {
 			f, err := os.Open(*flagItemsCreateFile.Get(cmd, true))
 			if err != nil {
@@ -187,6 +190,7 @@ var itemsCreateCmd = &cobra.Command{
 			return err
 		}
 
+		// --write フラグを指定した場合はファイルを更新する
 		if *flagItemsCreateWrite.Get(cmd, true) && flagItemsCreateFile.Changed(cmd) {
 			f, err := os.Create(*flagItemsCreateFile.Get(cmd, true))
 			if err != nil {
@@ -217,6 +221,7 @@ var itemsUpdateCmd = &cobra.Command{
 			return err
 		}
 
+		// --file フラグを指定せずに --write フラグを指定した場合はエラー
 		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
 			return ErrWriteWithoutFile
 		}
@@ -231,6 +236,7 @@ var itemsUpdateCmd = &cobra.Command{
 		var id string
 		params := &qiita.UpdateItemParameters{}
 
+		// --file フラグを指定した場合はファイルからパラメータを読み込む
 		if flagItemsUpdateFile.Changed(cmd) {
 			f, err := os.Open(*flagItemsUpdateFile.Get(cmd, true))
 			if err != nil {
@@ -258,6 +264,7 @@ var itemsUpdateCmd = &cobra.Command{
 		if id == "" {
 			return ErrIDRequired
 		}
+
 		if flagItemsUpdateTitle.Changed(cmd) {
 			params.Title = flagItemsUpdateTitle.Get(cmd, true)
 		}
@@ -277,6 +284,7 @@ var itemsUpdateCmd = &cobra.Command{
 			return err
 		}
 
+		// --write フラグを指定した場合はファイルを更新する
 		if *flagItemsUpdateWrite.Get(cmd, true) && flagItemsUpdateFile.Changed(cmd) {
 			f, err := os.Create(*flagItemsUpdateFile.Get(cmd, true))
 			if err != nil {
@@ -325,6 +333,7 @@ var itemsNewCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		filename := args[0]
+		// 末尾が .md でない場合は .md を付ける
 		if !strings.HasSuffix(filename, ".md") {
 			filename += ".md"
 		}
