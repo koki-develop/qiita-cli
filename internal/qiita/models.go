@@ -1,11 +1,21 @@
 package qiita
 
-import "github.com/koki-develop/qiita-cli/internal/printers"
+import (
+	"github.com/koki-develop/qiita-cli/internal/printers"
+	"github.com/koki-develop/qiita-cli/internal/util"
+)
 
 var (
 	_ printers.Printable = (Item)(nil)
 	_ printers.Printable = (Items)(nil)
 )
+
+type ItemFrontMatter struct {
+	ID      *string   `yaml:"id,omitempty"`
+	Title   *string   `yaml:"title,omitempty"`
+	Tags    *[]string `yaml:"tags,flow,omitempty"`
+	Private *bool     `yaml:"private,omitempty"`
+}
 
 type Item map[string]interface{}
 type Items []Item
@@ -28,6 +38,15 @@ func (item Item) Tags() Tags {
 	}
 
 	return rtn
+}
+
+func (item Item) FrontMatter() ItemFrontMatter {
+	return ItemFrontMatter{
+		ID:      util.String(item.ID()),
+		Title:   util.String(item.Title()),
+		Tags:    util.Strings(item.Tags().Names()),
+		Private: util.Bool(item.Private()),
+	}
 }
 
 func (item Item) Body() string {
