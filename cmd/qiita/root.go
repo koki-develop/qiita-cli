@@ -7,6 +7,7 @@ import (
 
 	"github.com/koki-develop/qiita-cli/internal/config"
 	"github.com/koki-develop/qiita-cli/internal/flags"
+	"github.com/koki-develop/qiita-cli/internal/notify"
 	"github.com/spf13/cobra"
 )
 
@@ -129,6 +130,8 @@ func init() {
 		flagItemsPullOut, // --out
 		flagItemsPullAll, // --all
 	}.AddTo(itemsPullCmd)
+
+	_ = notify.NotifyNewRelease(os.Stderr, version)
 }
 
 func loadConfig() (*config.Config, error) {
