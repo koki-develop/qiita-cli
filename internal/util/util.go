@@ -41,3 +41,7 @@ func Bool(b bool) *bool {
 func Strings(ss []string) *[]string {
 	return &ss
 }
+
+func Ptr[T any](t T) *T {
+	return &t
+}
