@@ -7,7 +7,8 @@ import (
 )
 
 type Printer interface {
-	Print(w io.Writer, cols []string, p Printable) error
+	Print(w io.Writer, p Printable) error
+	SetColumns(cols []string)
 }
 
 type Printable interface {

@@ -14,20 +14,22 @@ var (
 	Table = Register("table", NewTablePrinter())
 )
 
-type TablePrinter struct{}
+type TablePrinter struct {
+	columns []string
+}
 
 func NewTablePrinter() *TablePrinter {
 	return &TablePrinter{}
 }
 
 // TODO: refactor
-func (printer *TablePrinter) Print(w io.Writer, cols []string, p Printable) error {
+func (printer *TablePrinter) Print(w io.Writer, p Printable) error {
 	buf := new(bytes.Buffer)
 
 	rows := p.TableRows()
 
-	columnLengths := make(map[string]int, len(cols))
-	for _, col := range cols {
+	columnLengths := make(map[string]int, len(printer.columns))
+	for _, col := range printer.columns {
 		l := 0
 		for _, row := range rows {
 			v := row[col]
@@ -37,24 +39,24 @@ func (printer *TablePrinter) Print(w io.Writer, cols []string, p Printable) erro
 		columnLengths[col] = util.Max(l, util.Width(col))
 	}
 
-	for i, col := range cols {
+	for i, col := range printer.columns {
 		l := columnLengths[col]
 		h := util.Pad(col, l)
 
 		buf.WriteString(strings.ToUpper(h))
-		if i+1 != len(cols) {
+		if i+1 != len(printer.columns) {
 			buf.WriteRune(' ')
 		}
 	}
 	buf.WriteRune('\n')
 
 	for _, row := range rows {
-		for i, col := range cols {
+		for i, col := range printer.columns {
 			l := columnLengths[col]
 			v := row[col]
 			d := util.Pad(printer.string(v), l)
 			buf.WriteString(d)
-			if i+1 != len(cols) {
+			if i+1 != len(printer.columns) {
 				buf.WriteRune(' ')
 			}
 		}
@@ -80,4 +82,8 @@ func (printer *TablePrinter) string(v interface{}) string {
 	default:
 		return fmt.Sprintf("%v", v)
 	}
+}
+
+func (printer *TablePrinter) SetColumns(cols []string) {
+	printer.columns = cols
 }

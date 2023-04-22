@@ -47,7 +47,7 @@ var itemsSearchCmd = &cobra.Command{
 			return err
 		}
 
-		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), items); err != nil {
+		if err := p.Print(os.Stdout, items); err != nil {
 			return err
 		}
 
@@ -82,7 +82,7 @@ var itemsListCmd = &cobra.Command{
 			return err
 		}
 
-		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), items); err != nil {
+		if err := p.Print(os.Stdout, items); err != nil {
 			return err
 		}
 		return nil
@@ -114,7 +114,7 @@ var itemsGetCmd = &cobra.Command{
 			return err
 		}
 
-		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
+		if err := p.Print(os.Stdout, item); err != nil {
 			return err
 		}
 		return nil
@@ -202,7 +202,7 @@ var itemsCreateCmd = &cobra.Command{
 			}
 		}
 
-		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
+		if err := p.Print(os.Stdout, item); err != nil {
 			return err
 		}
 
@@ -296,7 +296,7 @@ var itemsUpdateCmd = &cobra.Command{
 			}
 		}
 
-		if err := p.Print(os.Stdout, *flagItemColumns.Get(cmd, true), item); err != nil {
+		if err := p.Print(os.Stdout, item); err != nil {
 			return err
 		}
 
