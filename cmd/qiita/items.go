@@ -13,25 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type itemFrontMatter struct {
-	ID      *string   `yaml:"id,omitempty"`
-	Title   *string   `yaml:"title,omitempty"`
-	Tags    *[]string `yaml:"tags,flow,omitempty"`
-	Private *bool     `yaml:"private,omitempty"`
-}
-
-func (fm *itemFrontMatter) QiitaTags() *qiita.Tags {
-	if fm.Tags == nil {
-		return nil
-	}
-
-	var tags qiita.Tags
-	for _, t := range *fm.Tags {
-		tags = append(tags, &qiita.Tag{Name: t})
-	}
-	return &tags
-}
-
 var itemsCmd = &cobra.Command{
 	Use:     "items",
 	Aliases: []string{"item"},
@@ -171,7 +152,7 @@ var itemsCreateCmd = &cobra.Command{
 			}
 			defer f.Close()
 
-			var fm itemFrontMatter
+			var fm qiita.ItemFrontMatter
 			md, err := util.ReadMarkdown(f, &fm)
 			if err != nil {
 				return err
@@ -208,18 +189,12 @@ var itemsCreateCmd = &cobra.Command{
 		}
 
 		if *flagItemsCreateWrite.Get(cmd, true) && flagItemsCreateFile.Changed(cmd) {
-			fm := itemFrontMatter{
-				ID:      util.String(item.ID()),
-				Title:   util.String(item.Title()),
-				Tags:    util.Strings(item.Tags().Names()),
-				Private: util.Bool(item.Private()),
-			}
 			f, err := os.Create(*flagItemsCreateFile.Get(cmd, true))
 			if err != nil {
 				return err
 			}
 			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
 				return err
 			}
 		}
@@ -264,7 +239,7 @@ var itemsUpdateCmd = &cobra.Command{
 			}
 			defer f.Close()
 
-			var fm itemFrontMatter
+			var fm qiita.ItemFrontMatter
 			md, err := util.ReadMarkdown(f, &fm)
 			if err != nil {
 				return err
@@ -304,18 +279,12 @@ var itemsUpdateCmd = &cobra.Command{
 		}
 
 		if *flagItemsUpdateWrite.Get(cmd, true) && flagItemsUpdateFile.Changed(cmd) {
-			fm := itemFrontMatter{
-				ID:      util.String(item.ID()),
-				Title:   util.String(item.Title()),
-				Tags:    util.Strings(item.Tags().Names()),
-				Private: util.Bool(item.Private()),
-			}
 			f, err := os.Create(*flagItemsUpdateFile.Get(cmd, true))
 			if err != nil {
 				return err
 			}
 			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
 				return err
 			}
 		}
@@ -376,7 +345,7 @@ var itemsNewCmd = &cobra.Command{
 		}
 		defer f.Close()
 
-		fm := itemFrontMatter{
+		fm := qiita.ItemFrontMatter{
 			Title:   flagItemsNewTitle.Get(cmd, true),
 			Tags:    flagItemsNewTags.Get(cmd, true),
 			Private: flagItemsNewPrivate.Get(cmd, true),
@@ -443,19 +412,13 @@ var itemsPullCmd = &cobra.Command{
 		}
 
 		for _, item := range items {
-			fm := itemFrontMatter{
-				ID:      util.String(item.ID()),
-				Title:   util.String(item.Title()),
-				Tags:    util.Strings(item.Tags().Names()),
-				Private: util.Bool(item.Private()),
-			}
-			filename := path.Join(out, fmt.Sprintf("%s.md", strings.ReplaceAll(*fm.Title, "/", "_")))
+			filename := path.Join(out, fmt.Sprintf("%s.md", strings.ReplaceAll(item.Title(), "/", "_")))
 			f, err := util.CreateFile(filename)
 			if err != nil {
 				return err
 			}
 			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), fm); err != nil {
+			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
 				return err
 			}
 		}
