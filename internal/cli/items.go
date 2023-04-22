@@ -32,6 +32,27 @@ func (c *CLI) ItemsSearch(params *ItemsSearchParameters) error {
 	return nil
 }
 
+type ItemsListParameters struct {
+	FlagPage    *flags.Int // --page
+	FlagPerPage *flags.Int // --per-page
+}
+
+func (c *CLI) ItemsList(params *ItemsListParameters) error {
+	items, err := c.client.ListAuthenticatedUserItems(&qiita.ListAuthenticatedUserItemsParameters{
+		Page:    params.FlagPage.Get(c.command, true),
+		PerPage: params.FlagPerPage.Get(c.command, true),
+	})
+	if err != nil {
+		return err
+	}
+
+	if err := c.printer.Print(c.writer, items); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type ItemsCreateParameters struct {
 	FlagFile    *flags.String      // --file
 	FlagWrite   *flags.Bool        // --write

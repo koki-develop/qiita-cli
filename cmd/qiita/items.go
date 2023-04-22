@@ -38,9 +38,9 @@ var itemsSearchCmd = &cobra.Command{
 		}
 
 		if err := c.ItemsSearch(&cli.ItemsSearchParameters{
-			FlagPage:    flagPage,
-			FlagPerPage: flagPerPage,
-			FlagQuery:   flagItemsSearchQuery,
+			FlagPage:    flagPage,             // --page
+			FlagPerPage: flagPerPage,          // --per-page
+			FlagQuery:   flagItemsSearchQuery, // --query
 		}); err != nil {
 			return err
 		}
@@ -55,30 +55,24 @@ var itemsListCmd = &cobra.Command{
 	Long:  "List own items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cfg, err := loadConfig()
+		c, err := cli.New(&cli.Config{
+			Command:     cmd,
+			Writer:      os.Stdout,
+			ErrWriter:   os.Stderr,
+			FlagFormat:  flagFormat,      // --format
+			FlagColumns: flagItemColumns, // --columns
+		})
 		if err != nil {
 			return err
 		}
 
-		p, err := printers.Get(*flagFormat.Get(cmd, true))
-		if err != nil {
+		if err := c.ItemsList(&cli.ItemsListParameters{
+			FlagPage:    flagPage,    // --page
+			FlagPerPage: flagPerPage, // --per-page
+		}); err != nil {
 			return err
 		}
 
-		cl := qiita.New(cfg.AccessToken)
-
-		params := &qiita.ListAuthenticatedUserItemsParameters{
-			Page:    flagPage.Get(cmd, true),
-			PerPage: flagPerPage.Get(cmd, true),
-		}
-		items, err := cl.ListAuthenticatedUserItems(params)
-		if err != nil {
-			return err
-		}
-
-		if err := p.Print(os.Stdout, items); err != nil {
-			return err
-		}
 		return nil
 	},
 }
