@@ -6,6 +6,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/koki-develop/qiita-cli/internal/cli"
 	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/koki-develop/qiita-cli/internal/util"
@@ -25,29 +26,22 @@ var itemsSearchCmd = &cobra.Command{
 	Long:  "Search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cfg, err := loadConfig()
+		c, err := cli.New(&cli.Config{
+			Command:     cmd,
+			Writer:      os.Stdout,
+			ErrWriter:   os.Stderr,
+			FlagFormat:  flagFormat,
+			FlagColumns: flagItemColumns,
+		})
 		if err != nil {
 			return err
 		}
 
-		p, err := printers.Get(*flagFormat.Get(cmd, true))
-		if err != nil {
-			return err
-		}
-
-		cl := qiita.New(cfg.AccessToken)
-
-		params := &qiita.ListItemsParameters{
-			Page:    flagPage.Get(cmd, true),
-			PerPage: flagPerPage.Get(cmd, true),
-			Query:   flagItemsSearchQuery.Get(cmd, false),
-		}
-		items, err := cl.ListItems(params)
-		if err != nil {
-			return err
-		}
-
-		if err := p.Print(os.Stdout, items); err != nil {
+		if err := c.ItemsSearch(&cli.ItemsSearchParameters{
+			FlagPage:    flagPage,
+			FlagPerPage: flagPerPage,
+			FlagQuery:   flagItemsSearchQuery,
+		}); err != nil {
 			return err
 		}
 

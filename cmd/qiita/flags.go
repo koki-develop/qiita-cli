@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/koki-develop/qiita-cli/internal/config"
 	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/koki-develop/qiita-cli/internal/printers"
 )
@@ -15,16 +14,6 @@ var (
 	flagFormat = &flags.String{Flag: &flags.Flag{
 		Name:        "format",
 		Description: fmt.Sprintf("output format (%s)", strings.Join(printers.ListFormats(), "|"))},
-		Default: func() string {
-			cfg, err := config.Load()
-			if err != nil {
-				return "table"
-			}
-			if cfg.Format != "" {
-				return cfg.Format
-			}
-			return "table"
-		}(),
 	}
 
 	// --page
