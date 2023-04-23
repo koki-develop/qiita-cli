@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/cli"
-	"github.com/koki-develop/qiita-cli/internal/printers"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
 	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
@@ -123,87 +122,20 @@ var itemsUpdateCmd = &cobra.Command{
 	Long:  "Update an item.",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cfg, err := loadConfig()
+		c, err := newItemsCLI(cmd)
 		if err != nil {
 			return err
 		}
 
-		// --file フラグを指定せずに --write フラグを指定した場合はエラー
-		if flagItemsCreateWrite.Changed(cmd) && !flagItemsCreateFile.Changed(cmd) {
-			return ErrWriteWithoutFile
-		}
-
-		p, err := printers.Get(*flagFormat.Get(cmd, true))
-		if err != nil {
-			return err
-		}
-
-		cl := qiita.New(cfg.AccessToken)
-
-		var id string
-		params := &qiita.UpdateItemParameters{}
-
-		// --file フラグを指定した場合はファイルからパラメータを読み込む
-		if flagItemsUpdateFile.Changed(cmd) {
-			f, err := os.Open(*flagItemsUpdateFile.Get(cmd, true))
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-
-			var fm qiita.ItemFrontMatter
-			md, err := util.ReadMarkdown(f, &fm)
-			if err != nil {
-				return err
-			}
-			if fm.ID != nil {
-				id = *fm.ID
-			}
-			params.Title = fm.Title
-			params.Tags = fm.QiitaTags()
-			params.Body = &md
-			params.Private = fm.Private
-		}
-
-		if len(args) > 0 {
-			id = args[0]
-		}
-		if id == "" {
-			return ErrIDRequired
-		}
-
-		if flagItemsUpdateTitle.Changed(cmd) {
-			params.Title = flagItemsUpdateTitle.Get(cmd, true)
-		}
-		if flagItemsUpdateTags.Changed(cmd) {
-			tags := qiita.TagsFromStrings(*flagItemsUpdateTags.Get(cmd, true))
-			params.Tags = &tags
-		}
-		if flagItemsUpdateBody.Changed(cmd) {
-			params.Body = flagItemsUpdateBody.Get(cmd, true)
-		}
-		if flagItemsUpdatePrivate.Changed(cmd) {
-			params.Private = flagItemsUpdatePrivate.Get(cmd, true)
-		}
-
-		item, err := cl.UpdateItem(id, params)
-		if err != nil {
-			return err
-		}
-
-		// --write フラグを指定した場合はファイルを更新する
-		if *flagItemsUpdateWrite.Get(cmd, true) && flagItemsUpdateFile.Changed(cmd) {
-			f, err := os.Create(*flagItemsUpdateFile.Get(cmd, true))
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
-				return err
-			}
-		}
-
-		if err := p.Print(os.Stdout, item); err != nil {
+		if err := c.ItemsUpdate(&cli.ItemsUpdateParameters{
+			Args:        args,
+			FlagFile:    flagItemsUpdateFile,    // --file
+			FlagWrite:   flagItemsUpdateWrite,   // --write
+			FlagTitle:   flagItemsUpdateTitle,   // --title
+			FlagTags:    flagItemsUpdateTags,    // --tags
+			FlagBody:    flagItemsUpdateBody,    // --body
+			FlagPrivate: flagItemsUpdatePrivate, // --private
+		}); err != nil {
 			return err
 		}
 

@@ -37,6 +37,7 @@ type ItemsListParameters struct {
 	FlagPerPage *flags.Int // --per-page
 }
 
+// $ qiita items list
 func (c *CLI) ItemsList(params *ItemsListParameters) error {
 	items, err := c.client.ListAuthenticatedUserItems(&qiita.ListAuthenticatedUserItemsParameters{
 		Page:    params.FlagPage.Get(c.command, true),
@@ -123,6 +124,77 @@ func (c *CLI) ItemsCreate(params *ItemsCreateParameters) error {
 	}
 
 	item, err := c.client.CreateItem(p)
+	if err != nil {
+		return err
+	}
+
+	if *params.FlagWrite.Get(c.command, true) {
+		if err := c.writeMarkdown(*file, item); err != nil {
+			return err
+		}
+	}
+
+	if err := c.printer.Print(c.writer, item); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type ItemsUpdateParameters struct {
+	Args        []string
+	FlagFile    *flags.String      // --file
+	FlagWrite   *flags.Bool        // --write
+	FlagTitle   *flags.String      // --title
+	FlagTags    *flags.StringSlice // --tags
+	FlagBody    *flags.String      // --body
+	FlagPrivate *flags.Bool        // --private
+}
+
+func (c *CLI) ItemsUpdate(params *ItemsUpdateParameters) error {
+	if params.FlagWrite.Changed(c.command) && !params.FlagFile.Changed(c.command) {
+		return ErrWriteWithoutFile
+	}
+	file := params.FlagFile.Get(c.command, false)
+
+	var id string
+	p := &qiita.UpdateItemParameters{}
+
+	if file != nil {
+		md, fm, err := c.readMarkdown(*file)
+		if err != nil {
+			return err
+		}
+		if fm.ID != nil {
+			id = *fm.ID
+		}
+		p.Title = fm.Title
+		p.Tags = fm.QiitaTags()
+		p.Body = &md
+		p.Private = fm.Private
+	}
+
+	if len(params.Args) > 0 {
+		id = params.Args[0]
+	}
+	if id == "" {
+		return ErrIDRequired
+	}
+
+	if params.FlagTitle.Changed(c.command) {
+		p.Title = params.FlagTitle.Get(c.command, true)
+	}
+	if params.FlagTags.Changed(c.command) {
+		p.Tags = util.Ptr(qiita.TagsFromStrings(*params.FlagTags.Get(c.command, true)))
+	}
+	if params.FlagBody.Changed(c.command) {
+		p.Body = params.FlagBody.Get(c.command, true)
+	}
+	if params.FlagPrivate.Changed(c.command) {
+		p.Private = params.FlagPrivate.Get(c.command, true)
+	}
+
+	item, err := c.client.UpdateItem(id, p)
 	if err != nil {
 		return err
 	}
