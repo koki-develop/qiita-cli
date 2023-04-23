@@ -49,7 +49,11 @@ $ qiita items create \
     --write
 ```
 
-記事が作成された後、 `test.md` に記事の ID が書き込まれていることが確認できます。
+実際に [Qiita](https://qiita.com) で記事が作成されていることが確認できます。
+
+![](./created.png)
+
+また、 `test.md` に記事の ID が書き込まれていることが確認できます。
 
 ```md
 ---
@@ -86,6 +90,10 @@ $ qiita items update \
     --file ./test.md \
     --write
 ```
+
+実際に [Qiita](https://qiita.com) で記事が更新されていることが確認できます。
+
+![](./updated.png)
 
 ## 既存の記事をダウンロードする
 

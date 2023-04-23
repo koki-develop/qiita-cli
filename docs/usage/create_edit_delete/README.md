@@ -25,7 +25,9 @@ $ qiita items create \
     --private
 ```
 
-成功すると作成した記事の情報が出力されます。
+実際に [Qiita](https://qiita.com) で記事が作成されていることが確認できます。
+
+![](./created.png)
 
 さらに詳しい使い方についてはヘルプをご参照ください。
 
@@ -51,7 +53,9 @@ $ qiita items update <記事のID> \
     --body '更新されたボディ'
 ```
 
-成功すると更新した記事の情報が出力されます。
+実際に [Qiita](https://qiita.com) で記事が更新されていることが確認できます。
+
+![](./updated.png)
 
 さらに詳しい使い方についてはヘルプをご参照ください。
 
@@ -70,7 +74,7 @@ $ qiita items update --help
 $ qiita items delete <記事のID>
 ```
 
-成功すると何も出力されず終了します。
+実際に [Qiita](https://qiita.com) で記事が削除されていることが確認できます。
 
 さらに詳しい使い方についてはヘルプをご参照ください。
 
