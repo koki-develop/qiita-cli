@@ -166,38 +166,19 @@ var itemsNewCmd = &cobra.Command{
 	Long:  "Create a new item file.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		filename := args[0]
-		// 末尾が .md でない場合は .md を付ける
-		if !strings.HasSuffix(filename, ".md") {
-			filename += ".md"
-		}
-
-		// もしファイルが既に存在している場合はエラーを返す
-		if _, err := os.Stat(filename); err != nil {
-			if !os.IsNotExist(err) {
-				return err
-			}
-		} else {
-			return fmt.Errorf("file already exists: %s", filename)
-		}
-
-		f, err := os.Create(filename)
+		c, err := newCLI(cmd, nil)
 		if err != nil {
 			return err
 		}
-		defer f.Close()
 
-		fm := qiita.ItemFrontMatter{
-			Title:   flagItemsNewTitle.Get(cmd, true),
-			Tags:    flagItemsNewTags.Get(cmd, true),
-			Private: flagItemsNewPrivate.Get(cmd, true),
-		}
-
-		if err := util.WriteMarkdown(f, "", fm); err != nil {
+		if err := c.ItemsNew(&cli.ItemsNewParameters{
+			Args:        args,
+			FlagTitle:   flagItemsNewTitle,   // --title
+			FlagTags:    flagItemsNewTags,    // --tags
+			FlagPrivate: flagItemsNewPrivate, // --private
+		}); err != nil {
 			return err
 		}
-
-		fmt.Printf("Created: %s\n", filename)
 
 		return nil
 	},

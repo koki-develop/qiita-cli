@@ -1,7 +1,9 @@
 package cli
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/koki-develop/qiita-cli/internal/qiita"
@@ -223,6 +225,47 @@ func (c *CLI) ItemsDelete(params *ItemsDeleteParameters) error {
 		}
 	}
 
+	return nil
+}
+
+type ItemsNewParameters struct {
+	Args        []string
+	FlagTitle   *flags.String      // --title
+	FlagTags    *flags.StringSlice // --tags
+	FlagPrivate *flags.Bool        // --private
+}
+
+func (c *CLI) ItemsNew(params *ItemsNewParameters) error {
+	filename := params.Args[0]
+	if !strings.HasSuffix(filename, ".md") {
+		filename += ".md"
+	}
+
+	ext, err := util.Exists(filename)
+	if err != nil {
+		return err
+	}
+	if ext {
+		return fmt.Errorf("file already exists: %s", filename)
+	}
+
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	fm := qiita.ItemFrontMatter{
+		Title:   params.FlagTitle.Get(c.command, true),
+		Tags:    params.FlagTags.Get(c.command, true),
+		Private: params.FlagPrivate.Get(c.command, true),
+	}
+
+	if err := util.WriteMarkdown(f, "", fm); err != nil {
+		return err
+	}
+
+	fmt.Fprintf(c.writer, "Created: %s\n", filename)
 	return nil
 }
 
