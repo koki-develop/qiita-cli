@@ -1,14 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"path"
-	"strings"
-
 	"github.com/koki-develop/qiita-cli/internal/cli"
-	"github.com/koki-develop/qiita-cli/internal/qiita"
-	"github.com/koki-develop/qiita-cli/internal/util"
 	"github.com/spf13/cobra"
 )
 
@@ -189,64 +182,19 @@ var itemsPullCmd = &cobra.Command{
 	Short: "Download items",
 	Long:  "Download items.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		all := *flagItemsPullAll.Get(cmd, true)
-		if all && len(args) > 0 {
-			return ErrIDsWithAll
-		}
-
-		cfg, err := loadConfig()
+		c, err := newCLI(cmd, nil)
 		if err != nil {
 			return err
 		}
 
-		cl := qiita.New(cfg.AccessToken)
-
-		fmt.Println("Pulling items...")
-
-		var items qiita.Items
-		if all {
-			for i := 0; i < 100; i++ {
-				p := &qiita.ListAuthenticatedUserItemsParameters{
-					PerPage: util.Int(100),
-					Page:    util.Int(i + 1),
-				}
-				is, err := cl.ListAuthenticatedUserItems(p)
-				if err != nil {
-					return err
-				}
-				items = append(items, is...)
-				if len(is) < 100 {
-					break
-				}
-			}
-		} else {
-			for _, id := range args {
-				item, err := cl.GetItem(id)
-				if err != nil {
-					return err
-				}
-				items = append(items, item)
-			}
-		}
-
-		out := *flagItemsPullOut.Get(cmd, true)
-		if err := os.MkdirAll(out, os.ModePerm); err != nil {
+		if err := c.ItemsPull(&cli.ItemsPullParameters{
+			Args:    args,
+			FlagAll: flagItemsPullAll, // --all
+			FlagOut: flagItemsPullOut, // --out
+		}); err != nil {
 			return err
 		}
 
-		for _, item := range items {
-			filename := path.Join(out, fmt.Sprintf("%s.md", strings.ReplaceAll(item.Title(), "/", "_")))
-			f, err := util.CreateFile(filename)
-			if err != nil {
-				return err
-			}
-			defer f.Close()
-			if err := util.WriteMarkdown(f, item.Body(), item.FrontMatter()); err != nil {
-				return err
-			}
-		}
-
-		fmt.Println("Done.")
 		return nil
 	},
 }

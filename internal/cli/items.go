@@ -2,7 +2,9 @@ package cli
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/koki-develop/qiita-cli/internal/flags"
@@ -269,6 +271,65 @@ func (c *CLI) ItemsNew(params *ItemsNewParameters) error {
 	return nil
 }
 
+type ItemsPullParameters struct {
+	Args    []string
+	FlagAll *flags.Bool   // --all
+	FlagOut *flags.String // --out
+}
+
+func (c *CLI) ItemsPull(params *ItemsPullParameters) error {
+	all := *params.FlagAll.Get(c.command, true)
+	if all && len(params.Args) > 0 {
+		return ErrIDsWithAll
+	}
+	if !all && len(params.Args) == 0 {
+		return ErrIDsRequired
+	}
+
+	fmt.Fprintln(c.writer, "Pulling...")
+	var items qiita.Items
+	if all {
+		for i := 0; i < 100; i++ {
+			p := &qiita.ListAuthenticatedUserItemsParameters{Page: util.Ptr(i + 1), PerPage: util.Ptr(100)}
+			is, err := c.client.ListAuthenticatedUserItems(p)
+			if err != nil {
+				return err
+			}
+			items = append(items, is...)
+			if len(is) < 100 {
+				break
+			}
+		}
+	} else {
+		for _, id := range params.Args {
+			item, err := c.client.GetItem(id)
+			if err != nil {
+				return err
+			}
+			items = append(items, item)
+		}
+	}
+
+	out := *params.FlagOut.Get(c.command, true)
+	if err := os.MkdirAll(out, 0755); err != nil {
+		return err
+	}
+
+	for _, item := range items {
+		filename := filepath.Join(out, strings.ReplaceAll(item.Title()+".md", "/", "_"))
+		f, err := util.CreateFile(filename)
+		if err != nil {
+			return err
+		}
+		if err := c.writeMarkdownTo(f, item); err != nil {
+			return err
+		}
+	}
+
+	fmt.Fprintln(c.writer, "Done.")
+	return nil
+}
+
 func (c *CLI) readMarkdown(file string) (string, qiita.ItemFrontMatter, error) {
 	f, err := os.Open(file)
 	if err != nil {
@@ -297,4 +358,8 @@ func (c *CLI) writeMarkdown(file string, item qiita.Item) error {
 	}
 
 	return nil
+}
+
+func (c *CLI) writeMarkdownTo(w io.Writer, item qiita.Item) error {
+	return util.WriteMarkdown(w, item.Body(), item.FrontMatter())
 }
