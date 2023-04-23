@@ -71,7 +71,7 @@ $ qiita items list
 Qiita CLI の設定を正しく行えていればコンソール上にあなたの記事一覧が出力されるはずです！  
 
 他にも Qiita CLI は様々な操作を行うことができます。  
-詳しくは[使い方](./docs/usage.md)をご参照ください。
+詳しくは[使い方](./docs/usage/README.md)をご参照ください。
 
 ## :memo: ライセンス
 
