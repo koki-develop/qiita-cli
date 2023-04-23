@@ -17,8 +17,8 @@ var configureCmd = &cobra.Command{
 		err := cli.Configure(&cli.ConfigureParameters{
 			Command:         cmd,
 			Writer:          os.Stdout,
-			FlagAccessToken: flagConfigureAccessToken,
-			FlagFormat:      flagConfigureFormat,
+			FlagAccessToken: flagConfigureAccessToken, // --access-token
+			FlagFormat:      flagConfigureFormat,      // --format
 		})
 		if err != nil {
 			return err
