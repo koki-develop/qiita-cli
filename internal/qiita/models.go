@@ -54,10 +54,10 @@ func (item Item) Tags() Tags {
 
 func (item Item) FrontMatter() ItemFrontMatter {
 	return ItemFrontMatter{
-		ID:      util.String(item.ID()),
-		Title:   util.String(item.Title()),
-		Tags:    util.Strings(item.Tags().Names()),
-		Private: util.Bool(item.Private()),
+		ID:      util.Ptr(item.ID()),
+		Title:   util.Ptr(item.Title()),
+		Tags:    util.Ptr(item.Tags().Names()),
+		Private: util.Ptr(item.Private()),
 	}
 }
 
