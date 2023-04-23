@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"runtime/debug"
 
 	"github.com/koki-develop/qiita-cli/internal/cli"
-	"github.com/koki-develop/qiita-cli/internal/config"
 	"github.com/koki-develop/qiita-cli/internal/flags"
 	"github.com/koki-develop/qiita-cli/internal/notify"
 	"github.com/spf13/cobra"
@@ -135,16 +133,6 @@ func init() {
 	_ = notify.NotifyNewRelease(os.Stderr, version)
 }
 
-func loadConfig() (*config.Config, error) {
-	cfg, err := config.Load()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to load config.\nIf you have not configured yet, please run `qiita configure`.")
-		return nil, err
-	}
-
-	return cfg, nil
-}
-
 func disableSortFlags(cmd *cobra.Command) {
 	cmd.Flags().SortFlags = false
 	for _, child := range cmd.Commands() {
@@ -158,6 +146,6 @@ func newCLI(cmd *cobra.Command, columns *flags.StringSlice) (*cli.CLI, error) {
 		Writer:      os.Stdout,
 		ErrWriter:   os.Stderr,
 		FlagFormat:  flagFormat, // --format
-		FlagColumns: columns,
+		FlagColumns: columns,    // --columns
 	})
 }
