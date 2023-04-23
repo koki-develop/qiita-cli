@@ -19,17 +19,13 @@ var itemsCmd = &cobra.Command{
 	Long:    "Manage items.",
 }
 
-func newItemsCLI(cmd *cobra.Command) (*cli.CLI, error) {
-	return newCLI(cmd, flagItemsColumns)
-}
-
 var itemsSearchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search items",
 	Long:  "Search items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := newItemsCLI(cmd)
+		c, err := newCLI(cmd, flagItemsColumns)
 		if err != nil {
 			return err
 		}
@@ -52,7 +48,7 @@ var itemsListCmd = &cobra.Command{
 	Long:  "List own items.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := newItemsCLI(cmd)
+		c, err := newCLI(cmd, flagItemsColumns)
 		if err != nil {
 			return err
 		}
@@ -74,7 +70,7 @@ var itemsGetCmd = &cobra.Command{
 	Long:  "Get an item.",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := newItemsCLI(cmd)
+		c, err := newCLI(cmd, flagItemsColumns)
 		if err != nil {
 			return err
 		}
@@ -95,7 +91,7 @@ var itemsCreateCmd = &cobra.Command{
 	Long:  "Create an item.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := newItemsCLI(cmd)
+		c, err := newCLI(cmd, flagItemsColumns)
 		if err != nil {
 			return err
 		}
@@ -122,7 +118,7 @@ var itemsUpdateCmd = &cobra.Command{
 	Long:  "Update an item.",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c, err := newItemsCLI(cmd)
+		c, err := newCLI(cmd, flagItemsColumns)
 		if err != nil {
 			return err
 		}
@@ -147,17 +143,16 @@ var itemsDeleteCmd = &cobra.Command{
 	Use:   "delete [id]",
 	Short: "Delete an item",
 	Long:  "Delete an item.",
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		id := args[0]
-
-		cfg, err := loadConfig()
+		c, err := newCLI(cmd, nil)
 		if err != nil {
 			return err
 		}
 
-		cl := qiita.New(cfg.AccessToken)
-		if err := cl.DeleteItem(id); err != nil {
+		if err := c.ItemsDelete(&cli.ItemsDeleteParameters{
+			Args: args,
+		}); err != nil {
 			return err
 		}
 

@@ -212,6 +212,20 @@ func (c *CLI) ItemsUpdate(params *ItemsUpdateParameters) error {
 	return nil
 }
 
+type ItemsDeleteParameters struct {
+	Args []string
+}
+
+func (c *CLI) ItemsDelete(params *ItemsDeleteParameters) error {
+	for _, id := range params.Args {
+		if err := c.client.DeleteItem(id); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (c *CLI) readMarkdown(file string) (string, qiita.ItemFrontMatter, error) {
 	f, err := os.Open(file)
 	if err != nil {
