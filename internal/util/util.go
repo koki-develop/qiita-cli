@@ -26,22 +26,6 @@ func Pad(s string, length int) string {
 	return s
 }
 
-func String(s string) *string {
-	return &s
-}
-
-func Int(i int) *int {
-	return &i
-}
-
-func Bool(b bool) *bool {
-	return &b
-}
-
-func Strings(ss []string) *[]string {
-	return &ss
-}
-
 func Ptr[T any](t T) *T {
 	return &t
 }
