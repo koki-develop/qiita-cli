@@ -133,7 +133,7 @@ var itemsUpdateCmd = &cobra.Command{
 }
 
 var itemsDeleteCmd = &cobra.Command{
-	Use:   "delete [id]",
+	Use:   "delete [ids]",
 	Short: "Delete an item",
 	Long:  "Delete an item.",
 	Args:  cobra.MinimumNArgs(1),
