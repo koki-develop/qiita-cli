@@ -177,6 +177,15 @@ var itemsNewCmd = &cobra.Command{
 	},
 }
 
+var itemsPushCmd = &cobra.Command{
+	Use:   "push [files]",
+	Short: "Upload items",
+	Long:  "Upload items.",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
+}
+
 var itemsPullCmd = &cobra.Command{
 	Use:   "pull [ids]",
 	Short: "Download items",

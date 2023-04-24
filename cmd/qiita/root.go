@@ -124,6 +124,11 @@ func init() {
 		flagItemsNewPrivate, // --private
 	}.AddTo(itemsNewCmd)
 
+	/* items push */
+	flags.Flags{
+		flagItemsPushWrite, // --write
+	}.AddTo(itemsPushCmd)
+
 	/* items pull */
 	flags.Flags{
 		flagItemsPullOut, // --out

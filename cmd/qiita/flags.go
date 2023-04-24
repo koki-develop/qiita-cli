@@ -168,6 +168,15 @@ var (
 	}
 )
 
+// items push
+var (
+	// --write
+	flagItemsPushWrite = &flags.Bool{Flag: &flags.Flag{
+		Name:        "write",
+		Description: "write information about the pushed item to a file",
+	}}
+)
+
 // items pull
 var (
 	// --out
