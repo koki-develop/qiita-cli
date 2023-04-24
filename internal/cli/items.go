@@ -312,7 +312,7 @@ func (c *CLI) ItemsPush(params *ItemsPushParameters) error {
 				return err
 			}
 		}
-		fmt.Fprintln(c.writer, "Pushed.")
+		fmt.Fprintf(c.writer, "Pushed: %s\n", item.URL())
 
 		if *params.FlagWrite.Get(c.command, true) {
 			if err := c.writeMarkdown(filename, item); err != nil {

@@ -36,6 +36,10 @@ func (item Item) ID() string {
 	return item["id"].(string)
 }
 
+func (item Item) URL() string {
+	return item["url"].(string)
+}
+
 func (item Item) Title() string {
 	return item["title"].(string)
 }
