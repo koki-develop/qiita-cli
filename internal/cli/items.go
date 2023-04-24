@@ -277,14 +277,14 @@ type ItemsPushParameters struct {
 }
 
 func (c *CLI) ItemsPush(params *ItemsPushParameters) error {
-	fmt.Fprintln(c.writer, "Pushing...")
-
 	for _, filename := range params.Args {
 		md, fm, err := c.readMarkdown(filename)
 		if err != nil {
 			return err
 		}
 
+		fmt.Fprintf(c.writer, "Pushing... %s\n", filename)
+		var item qiita.Item
 		if fm.ID == nil {
 			// create
 			p := &qiita.CreateItemParameters{
@@ -293,14 +293,10 @@ func (c *CLI) ItemsPush(params *ItemsPushParameters) error {
 				Body:    &md,
 				Private: fm.Private,
 			}
-			item, err := c.client.CreateItem(p)
+			var err error
+			item, err = c.client.CreateItem(p)
 			if err != nil {
 				return err
-			}
-			if *params.FlagWrite.Get(c.command, true) {
-				if err := c.writeMarkdown(filename, item); err != nil {
-					return err
-				}
 			}
 		} else {
 			// update
@@ -310,19 +306,21 @@ func (c *CLI) ItemsPush(params *ItemsPushParameters) error {
 				Body:    &md,
 				Private: fm.Private,
 			}
-			item, err := c.client.UpdateItem(*fm.ID, p)
+			var err error
+			item, err = c.client.UpdateItem(*fm.ID, p)
 			if err != nil {
 				return err
 			}
-			if *params.FlagWrite.Get(c.command, true) {
-				if err := c.writeMarkdown(filename, item); err != nil {
-					return err
-				}
+		}
+		fmt.Fprintln(c.writer, "Pushed.")
+
+		if *params.FlagWrite.Get(c.command, true) {
+			if err := c.writeMarkdown(filename, item); err != nil {
+				return err
 			}
 		}
 	}
 
-	fmt.Fprintln(c.writer, "Pushed.")
 	return nil
 }
 
