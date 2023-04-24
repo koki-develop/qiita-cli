@@ -84,7 +84,7 @@ private: true
 最後に `qiita items push` を次のように実行すると記事を更新することができます。  
 
 ```sh
-$ qiita items update ./test.md --write
+$ qiita items push ./test.md --write
 ```
 
 実際に [Qiita](https://qiita.com) で記事が更新されていることが確認できます。
@@ -101,4 +101,4 @@ $ qiita items pull --all --out ./items
 ```
 
 すると全ての自分の記事が `./items/<記事のタイトル>.md` という名前でマークダウン形式で保存されます。  
-その後は `qiita items update` などを使用して記事をマークダウンファイルで管理することができます。
+その後は `qiita items push` を使用して記事をマークダウンファイルで管理 / 更新することができます。
