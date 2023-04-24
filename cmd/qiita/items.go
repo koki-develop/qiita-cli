@@ -90,8 +90,6 @@ var itemsCreateCmd = &cobra.Command{
 		}
 
 		if err := c.ItemsCreate(&cli.ItemsCreateParameters{
-			FlagFile:    flagItemsCreateFile,    // --file
-			FlagWrite:   flagItemsCreateWrite,   // --write
 			FlagTitle:   flagItemsCreateTitle,   // --title
 			FlagBody:    flagItemsCreateBody,    // --body
 			FlagTags:    flagItemsCreateTags,    // --tags
@@ -118,8 +116,6 @@ var itemsUpdateCmd = &cobra.Command{
 
 		if err := c.ItemsUpdate(&cli.ItemsUpdateParameters{
 			Args:        args,
-			FlagFile:    flagItemsUpdateFile,    // --file
-			FlagWrite:   flagItemsUpdateWrite,   // --write
 			FlagTitle:   flagItemsUpdateTitle,   // --title
 			FlagTags:    flagItemsUpdateTags,    // --tags
 			FlagBody:    flagItemsUpdateBody,    // --body
@@ -169,6 +165,28 @@ var itemsNewCmd = &cobra.Command{
 			FlagTitle:   flagItemsNewTitle,   // --title
 			FlagTags:    flagItemsNewTags,    // --tags
 			FlagPrivate: flagItemsNewPrivate, // --private
+		}); err != nil {
+			return err
+		}
+
+		return nil
+	},
+}
+
+var itemsPushCmd = &cobra.Command{
+	Use:   "push [files]",
+	Short: "Upload items",
+	Long:  "Upload items.",
+	Args:  cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := newCLI(cmd, nil)
+		if err != nil {
+			return err
+		}
+
+		if err := c.ItemsPush(&cli.ItemsPushParameters{
+			Args:      args,
+			FlagWrite: flagItemsPushWrite, // --write
 		}); err != nil {
 			return err
 		}

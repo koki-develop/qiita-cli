@@ -65,18 +65,6 @@ var (
 
 // items create
 var (
-	// --file
-	flagItemsCreateFile = &flags.String{Flag: &flags.Flag{
-		Name:        "file",
-		Description: "create an item from a file",
-	}}
-
-	// --write
-	flagItemsCreateWrite = &flags.Bool{Flag: &flags.Flag{
-		Name:        "write",
-		Description: "write information about the created item to a file",
-	}}
-
 	// --title
 	flagItemsCreateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
@@ -110,18 +98,6 @@ var (
 
 // items update
 var (
-	// --file
-	flagItemsUpdateFile = &flags.String{Flag: &flags.Flag{
-		Name:        "file",
-		Description: "update an item from a file",
-	}}
-
-	// --write
-	flagItemsUpdateWrite = &flags.Bool{Flag: &flags.Flag{
-		Name:        "write",
-		Description: "write information about the updated item to a file",
-	}}
-
 	// --title
 	flagItemsUpdateTitle = &flags.String{Flag: &flags.Flag{
 		Name:        "title",
@@ -166,6 +142,15 @@ var (
 		Name:        "private",
 		Description: "whether the item is private"},
 	}
+)
+
+// items push
+var (
+	// --write
+	flagItemsPushWrite = &flags.Bool{Flag: &flags.Flag{
+		Name:        "write",
+		Description: "write information about the pushed item to a file",
+	}}
 )
 
 // items pull

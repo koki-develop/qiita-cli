@@ -40,13 +40,11 @@ private: true
 これはテスト投稿です。
 ```
 
-最後に `qiita items create` を次のように実行すると記事を作成することができます。  
+最後に `qiita items push` を次のように実行すると記事を作成することができます。  
 `--write` フラグを指定すると ID などのメタ情報がファイルに書き込まれます。
 
 ```sh
-$ qiita items create \
-    --file ./test.md \
-    --write
+$ qiita items push ./test.md --write
 ```
 
 実際に [Qiita](https://qiita.com) で記事が作成されていることが確認できます。
@@ -83,12 +81,10 @@ private: true
 更新されたボディ
 ```
 
-最後に `qiita items update` を次のように実行すると記事を更新することができます。  
+最後に `qiita items push` を次のように実行すると記事を更新することができます。  
 
 ```sh
-$ qiita items update \
-    --file ./test.md \
-    --write
+$ qiita items push ./test.md --write
 ```
 
 実際に [Qiita](https://qiita.com) で記事が更新されていることが確認できます。
@@ -105,4 +101,4 @@ $ qiita items pull --all --out ./items
 ```
 
 すると全ての自分の記事が `./items/<記事のタイトル>.md` という名前でマークダウン形式で保存されます。  
-その後は `qiita items update` などを使用して記事をマークダウンファイルで管理することができます。
+その後は `qiita items push` を使用して記事をマークダウンファイルで管理 / 更新することができます。

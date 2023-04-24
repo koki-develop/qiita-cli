@@ -55,6 +55,7 @@ func init() {
 		itemsUpdateCmd, // items update
 		itemsDeleteCmd, // items delete
 		itemsNewCmd,    // items new
+		itemsPushCmd,   // items push
 		itemsPullCmd,   // items pull
 	)
 
@@ -96,8 +97,6 @@ func init() {
 	flags.Flags{
 		flagFormat,             // --format
 		flagItemsColumns,       // --columns
-		flagItemsCreateFile,    // --file
-		flagItemsCreateWrite,   // --write
 		flagItemsCreateTitle,   // --title
 		flagItemsCreateTags,    // --tags
 		flagItemsCreateBody,    // --body
@@ -109,8 +108,6 @@ func init() {
 	flags.Flags{
 		flagFormat,             // --format
 		flagItemsColumns,       // --columns
-		flagItemsUpdateFile,    // --file
-		flagItemsUpdateWrite,   // --write
 		flagItemsUpdateTitle,   // --title
 		flagItemsUpdateTags,    // --tags
 		flagItemsUpdateBody,    // --body
@@ -123,6 +120,11 @@ func init() {
 		flagItemsNewTags,    // --tags
 		flagItemsNewPrivate, // --private
 	}.AddTo(itemsNewCmd)
+
+	/* items push */
+	flags.Flags{
+		flagItemsPushWrite, // --write
+	}.AddTo(itemsPushCmd)
 
 	/* items pull */
 	flags.Flags{
