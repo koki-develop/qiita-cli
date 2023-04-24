@@ -271,6 +271,61 @@ func (c *CLI) ItemsNew(params *ItemsNewParameters) error {
 	return nil
 }
 
+type ItemsPushParameters struct {
+	Args      []string
+	FlagWrite *flags.Bool // --write
+}
+
+func (c *CLI) ItemsPush(params *ItemsPushParameters) error {
+	fmt.Fprintln(c.writer, "Pushing...")
+
+	for _, filename := range params.Args {
+		md, fm, err := c.readMarkdown(filename)
+		if err != nil {
+			return err
+		}
+
+		if fm.ID == nil {
+			// create
+			p := &qiita.CreateItemParameters{
+				Title:   fm.Title,
+				Tags:    fm.QiitaTags(),
+				Body:    &md,
+				Private: fm.Private,
+			}
+			item, err := c.client.CreateItem(p)
+			if err != nil {
+				return err
+			}
+			if *params.FlagWrite.Get(c.command, true) {
+				if err := c.writeMarkdown(filename, item); err != nil {
+					return err
+				}
+			}
+		} else {
+			// update
+			p := &qiita.UpdateItemParameters{
+				Title:   fm.Title,
+				Tags:    fm.QiitaTags(),
+				Body:    &md,
+				Private: fm.Private,
+			}
+			item, err := c.client.UpdateItem(*fm.ID, p)
+			if err != nil {
+				return err
+			}
+			if *params.FlagWrite.Get(c.command, true) {
+				if err := c.writeMarkdown(filename, item); err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	fmt.Fprintln(c.writer, "Pushed.")
+	return nil
+}
+
 type ItemsPullParameters struct {
 	Args    []string
 	FlagAll *flags.Bool   // --all

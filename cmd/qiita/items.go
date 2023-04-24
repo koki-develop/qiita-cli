@@ -181,7 +181,20 @@ var itemsPushCmd = &cobra.Command{
 	Use:   "push [files]",
 	Short: "Upload items",
 	Long:  "Upload items.",
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		c, err := newCLI(cmd, nil)
+		if err != nil {
+			return err
+		}
+
+		if err := c.ItemsPush(&cli.ItemsPushParameters{
+			Args:      args,
+			FlagWrite: flagItemsPushWrite, // --write
+		}); err != nil {
+			return err
+		}
+
 		return nil
 	},
 }

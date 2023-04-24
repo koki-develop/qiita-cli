@@ -55,6 +55,7 @@ func init() {
 		itemsUpdateCmd, // items update
 		itemsDeleteCmd, // items delete
 		itemsNewCmd,    // items new
+		itemsPushCmd,   // items push
 		itemsPullCmd,   // items pull
 	)
 
