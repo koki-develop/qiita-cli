@@ -79,8 +79,6 @@ func (c *CLI) ItemsGet(params *ItemsGetParameters) error {
 }
 
 type ItemsCreateParameters struct {
-	FlagFile    *flags.String      // --file
-	FlagWrite   *flags.Bool        // --write
 	FlagTitle   *flags.String      // --title
 	FlagTags    *flags.StringSlice // --tags
 	FlagBody    *flags.String      // --body
@@ -90,52 +88,19 @@ type ItemsCreateParameters struct {
 
 // $ qiita items create
 func (c *CLI) ItemsCreate(params *ItemsCreateParameters) error {
-	if params.FlagWrite.Changed(c.command) && !params.FlagFile.Changed(c.command) {
-		return ErrWriteWithoutFile
-	}
-	file := params.FlagFile.Get(c.command, false)
-
-	p := &qiita.CreateItemParameters{}
-
-	if file != nil {
-		md, fm, err := c.readMarkdown(*file)
-		if err != nil {
-			return err
-		}
-		if fm.ID != nil {
-			return ErrCreateWithID
-		}
-		p.Title = fm.Title
-		p.Tags = fm.QiitaTags()
-		p.Body = &md
-		p.Private = fm.Private
-	}
-
-	if params.FlagTitle.Changed(c.command) {
-		p.Title = params.FlagTitle.Get(c.command, true)
+	p := &qiita.CreateItemParameters{
+		Title:   params.FlagTitle.Get(c.command, false),
+		Body:    params.FlagBody.Get(c.command, false),
+		Private: params.FlagPrivate.Get(c.command, false),
+		Tweet:   params.FlagTweet.Get(c.command, false),
 	}
 	if params.FlagTags.Changed(c.command) {
 		p.Tags = util.Ptr(qiita.TagsFromStrings(*params.FlagTags.Get(c.command, true)))
-	}
-	if params.FlagBody.Changed(c.command) {
-		p.Body = params.FlagBody.Get(c.command, true)
-	}
-	if params.FlagPrivate.Changed(c.command) {
-		p.Private = params.FlagPrivate.Get(c.command, true)
-	}
-	if params.FlagTweet.Changed(c.command) {
-		p.Tweet = params.FlagTweet.Get(c.command, true)
 	}
 
 	item, err := c.client.CreateItem(p)
 	if err != nil {
 		return err
-	}
-
-	if *params.FlagWrite.Get(c.command, true) {
-		if err := c.writeMarkdown(*file, item); err != nil {
-			return err
-		}
 	}
 
 	if err := c.printer.Print(c.writer, item); err != nil {
@@ -147,8 +112,6 @@ func (c *CLI) ItemsCreate(params *ItemsCreateParameters) error {
 
 type ItemsUpdateParameters struct {
 	Args        []string
-	FlagFile    *flags.String      // --file
-	FlagWrite   *flags.Bool        // --write
 	FlagTitle   *flags.String      // --title
 	FlagTags    *flags.StringSlice // --tags
 	FlagBody    *flags.String      // --body
@@ -156,57 +119,19 @@ type ItemsUpdateParameters struct {
 }
 
 func (c *CLI) ItemsUpdate(params *ItemsUpdateParameters) error {
-	if params.FlagWrite.Changed(c.command) && !params.FlagFile.Changed(c.command) {
-		return ErrWriteWithoutFile
-	}
-	file := params.FlagFile.Get(c.command, false)
-
-	var id string
-	p := &qiita.UpdateItemParameters{}
-
-	if file != nil {
-		md, fm, err := c.readMarkdown(*file)
-		if err != nil {
-			return err
-		}
-		if fm.ID != nil {
-			id = *fm.ID
-		}
-		p.Title = fm.Title
-		p.Tags = fm.QiitaTags()
-		p.Body = &md
-		p.Private = fm.Private
-	}
-
-	if len(params.Args) > 0 {
-		id = params.Args[0]
-	}
-	if id == "" {
-		return ErrIDRequired
-	}
-
-	if params.FlagTitle.Changed(c.command) {
-		p.Title = params.FlagTitle.Get(c.command, true)
+	id := params.Args[0]
+	p := &qiita.UpdateItemParameters{
+		Title:   params.FlagTitle.Get(c.command, false),
+		Body:    params.FlagBody.Get(c.command, false),
+		Private: params.FlagPrivate.Get(c.command, false),
 	}
 	if params.FlagTags.Changed(c.command) {
 		p.Tags = util.Ptr(qiita.TagsFromStrings(*params.FlagTags.Get(c.command, true)))
-	}
-	if params.FlagBody.Changed(c.command) {
-		p.Body = params.FlagBody.Get(c.command, true)
-	}
-	if params.FlagPrivate.Changed(c.command) {
-		p.Private = params.FlagPrivate.Get(c.command, true)
 	}
 
 	item, err := c.client.UpdateItem(id, p)
 	if err != nil {
 		return err
-	}
-
-	if *params.FlagWrite.Get(c.command, true) {
-		if err := c.writeMarkdown(*file, item); err != nil {
-			return err
-		}
 	}
 
 	if err := c.printer.Print(c.writer, item); err != nil {

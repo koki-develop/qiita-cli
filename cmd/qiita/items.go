@@ -90,8 +90,6 @@ var itemsCreateCmd = &cobra.Command{
 		}
 
 		if err := c.ItemsCreate(&cli.ItemsCreateParameters{
-			FlagFile:    flagItemsCreateFile,    // --file
-			FlagWrite:   flagItemsCreateWrite,   // --write
 			FlagTitle:   flagItemsCreateTitle,   // --title
 			FlagBody:    flagItemsCreateBody,    // --body
 			FlagTags:    flagItemsCreateTags,    // --tags
@@ -118,8 +116,6 @@ var itemsUpdateCmd = &cobra.Command{
 
 		if err := c.ItemsUpdate(&cli.ItemsUpdateParameters{
 			Args:        args,
-			FlagFile:    flagItemsUpdateFile,    // --file
-			FlagWrite:   flagItemsUpdateWrite,   // --write
 			FlagTitle:   flagItemsUpdateTitle,   // --title
 			FlagTags:    flagItemsUpdateTags,    // --tags
 			FlagBody:    flagItemsUpdateBody,    // --body

@@ -97,8 +97,6 @@ func init() {
 	flags.Flags{
 		flagFormat,             // --format
 		flagItemsColumns,       // --columns
-		flagItemsCreateFile,    // --file
-		flagItemsCreateWrite,   // --write
 		flagItemsCreateTitle,   // --title
 		flagItemsCreateTags,    // --tags
 		flagItemsCreateBody,    // --body
@@ -110,8 +108,6 @@ func init() {
 	flags.Flags{
 		flagFormat,             // --format
 		flagItemsColumns,       // --columns
-		flagItemsUpdateFile,    // --file
-		flagItemsUpdateWrite,   // --write
 		flagItemsUpdateTitle,   // --title
 		flagItemsUpdateTags,    // --tags
 		flagItemsUpdateBody,    // --body
