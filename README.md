@@ -1,5 +1,5 @@
 <h1 align="center">
-Qiita CLI
+<img src="./assets/logo.svg" alt="CLI for Qiita">
 </h1>
 
 <p align="center">
@@ -8,6 +8,10 @@ Qiita CLI
 <a href="https://codeclimate.com/github/koki-develop/qiita-cli/maintainability"><img src="https://img.shields.io/codeclimate/maintainability/koki-develop/qiita-cli?style=flat-square&amp;logo=codeclimate" alt="Maintainability"></a>
 <a href="https://goreportcard.com/report/github.com/koki-develop/qiita-cli"><img src="https://goreportcard.com/badge/github.com/koki-develop/qiita-cli?style=flat-square" alt="Go Report Card"></a>
 <a href="./LICENSE"><img src="https://img.shields.io/github/license/koki-develop/qiita-cli?style=flat-square" alt="LICENSE"></a>
+</p>
+
+<p align="center">
+Qiita の CLI ( 非公式 ) 。
 </p>
 
 ## 目次
